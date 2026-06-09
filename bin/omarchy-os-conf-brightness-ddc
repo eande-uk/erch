@@ -1,0 +1,53 @@
+#!/bin/bash
+# omarchy:summary=Adjust external monitor brightness via DDC/CI
+# omarchy:group=os-conf
+# omarchy:name=brightness-ddc
+# omarchy:examples=omarchy os-conf brightness-ddc raise
+
+set -euo pipefail
+
+usage() {
+  cat <<EOF
+omarchy os-conf brightness-ddc — Adjust external monitor brightness via DDC/CI
+
+Usage:
+  omarchy os-conf brightness-ddc {raise|lower|min|max}
+
+Arguments:
+  raise  increase brightness by 20%
+  lower  decrease brightness by 20%
+  min    set brightness to 0%
+  max    set brightness to 100%
+EOF
+  exit 0
+}
+
+case "${1:-}" in
+  raise|lower|min|max) ;;
+  -h|--help) usage ;;
+  *) echo "Usage: $(basename "$0") {raise|lower|min|max}" >&2; exit 1 ;;
+esac
+
+MONITOR=$(hyprctl monitors -j | jq -r '.[] | select(.focused == true).name' 2>/dev/null || echo "")
+[[ -z "$MONITOR" ]] && { gum style --foreground "#BF616A" "Could not detect focused monitor"; exit 1; }
+
+case "$MONITOR" in
+  "DP-1") BUS=1 ;;
+  "DP-3") BUS=5 ;;
+  *) gum style --foreground "#EBCB8B" "Unknown monitor: $MONITOR (add bus mapping)"; exit 1 ;;
+esac
+
+CURRENT=$(ddcutil getvcp 10 --bus "$BUS" 2>/dev/null | grep -oP 'current value =\s*\K\d+' || echo "")
+[[ -z "$CURRENT" ]] && { gum style --foreground "#BF616A" "Failed to read brightness from $MONITOR (bus $BUS)"; exit 1; }
+
+STEP=20
+case "$1" in
+  raise) NEW=$((CURRENT + STEP)); [ $NEW -gt 100 ] && NEW=100 ;;
+  lower) NEW=$((CURRENT - STEP)); [ $NEW -lt 0 ]  && NEW=0 ;;
+  min)   NEW=0 ;;
+  max)   NEW=100 ;;
+esac
+
+ddcutil setvcp 10 "$NEW" --bus "$BUS" >/dev/null 2>&1
+swayosd-client --monitor "$MONITOR" --brightness="$NEW" 2>/dev/null || true
+gum style --foreground "#A3BE8C" "  $MONITOR brightness: ${CURRENT}% → ${NEW}%"

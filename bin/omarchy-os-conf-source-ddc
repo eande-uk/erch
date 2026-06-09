@@ -1,0 +1,46 @@
+#!/bin/bash
+# omarchy:summary=Select external monitor input source via DDC/CI
+# omarchy:group=os-conf
+# omarchy:name=source-ddc
+# omarchy:examples=omarchy os-conf source-ddc
+
+set -euo pipefail
+
+usage() {
+  cat <<EOF
+omarchy os-conf source-ddc — Select external monitor input source via DDC/CI
+
+Opens an interactive picker on the focused monitor's supported inputs.
+
+Usage:
+  omarchy os-conf source-ddc
+EOF
+  exit 0
+}
+
+[[ "${1:-}" == "--help" || "${1:-}" == "-h" ]] && usage
+
+MONITOR=$(hyprctl monitors -j | jq -r '.[] | select(.focused == true).name' 2>/dev/null || echo "")
+[[ -z "$MONITOR" ]] && { gum style --foreground "#BF616A" "Could not detect focused monitor"; exit 1; }
+
+declare -A INPUT_NAMES
+case "$MONITOR" in
+  "DP-1")
+    BUS=1
+    INPUT_NAMES+=(["VGA"]="01" ["DP-1"]="0f")
+    ;;
+  "DP-3")
+    BUS=5
+    INPUT_NAMES+=(["DP-1"]="0f" ["DP-2"]="10" ["HDMI-1"]="11" ["HDMI-2"]="12" ["VGA"]="01")
+    ;;
+  *)
+    gum style --foreground "#EBCB8B" "Unknown monitor: $MONITOR (add bus mapping)"
+    exit 1
+    ;;
+esac
+
+CHOICE=$(gum choose ${!INPUT_NAMES[@]})
+[[ -z "$CHOICE" ]] && exit 0
+
+ddcutil setvcp 60 "${INPUT_NAMES[$CHOICE]}" --bus "$BUS" >/dev/null 2>&1
+gum style --foreground "#A3BE8C" "  $MONITOR → input $CHOICE (0x${INPUT_NAMES[$CHOICE]})"
