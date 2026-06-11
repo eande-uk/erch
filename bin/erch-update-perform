@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# erch:summary=Run the full erch update pipeline
+# erch:requires-sudo=true
+
+set -e
+
+# Ensure screensaver/sleep doesn't set in during updates
+hyprctl dispatch tagwindow +noidle &>/dev/null || true
+
+# Perform all update steps
+erch-update-keyring
+erch-update-available-reset
+erch-update-system-pkgs
+erch-migrate
+erch-update-aur-pkgs
+erch-update-orphan-pkgs
+erch-hook post-update
+
+erch-update-analyze-logs
+
+erch-update-restart
+
+# Re-enable screensaver/sleep after updates
+hyprctl dispatch tagwindow -- -noidle &>/dev/null || true

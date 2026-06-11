@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# erch:summary=No-op now that erch-update-perform is responsible for idle management.
+# erch:hidden=true

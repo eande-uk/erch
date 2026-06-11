@@ -1,3 +1,3 @@
-if omarchy-hw-dell-xps-haptic-touchpad; then
-  omarchy-pkg-add dell-xps-touchpad-haptics
+if erch-hw-dell-xps-haptic-touchpad; then
+  erch-pkg-add dell-xps-touchpad-haptics
 fi

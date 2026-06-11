@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# erch:summary=Restart the hypridle service (used for idle detection and auto-lock).
+
+erch-restart-app hypridle

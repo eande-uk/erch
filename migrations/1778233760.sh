@@ -1,3 +1,3 @@
-echo "Add Omarchy AI skill to pi, Codex, and shared Agent Skills directories"
+echo "Add erch AI skill to pi, Codex, and shared Agent Skills directories"
 
-source "$OMARCHY_PATH/install/config/omarchy-ai-skill.sh"
+source "$ERCH_PATH/install/config/erch-ai-skill.sh"

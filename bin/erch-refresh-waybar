@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# erch:summary=Reset Waybar config to erch defaults
+# erch:examples=erch refresh waybar
+
+erch-refresh-config waybar/config.jsonc
+erch-refresh-config waybar/style.css
+erch-restart-waybar

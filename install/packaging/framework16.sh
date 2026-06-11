@@ -1,3 +1,3 @@
-if omarchy-hw-framework16; then
-  omarchy-pkg-add qmk-hid
+if erch-hw-framework16; then
+  erch-pkg-add qmk-hid
 fi

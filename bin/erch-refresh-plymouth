@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# erch:summary=Overwrite the user config for the Plymouth drive decryption and boot sequence with the erch default and rebuild it.
+# erch:requires-sudo=true
+
+sudo cp -r ~/.local/share/erch/default/plymouth/* /usr/share/plymouth/themes/erch/
+sudo plymouth-set-default-theme erch
+
+if command -v limine-mkinitcpio &>/dev/null; then
+  sudo limine-mkinitcpio
+else
+  sudo mkinitcpio -P
+fi

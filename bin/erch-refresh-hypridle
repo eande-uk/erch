@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# erch:summary=Overwrite the user config for hypridle with the erch default and restart the service.
+
+erch-refresh-config hypr/hypridle.conf
+erch-restart-hypridle

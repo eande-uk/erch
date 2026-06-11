@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# erch:summary=Launch a TUI or focus an existing terminal window for it
+# erch:args=<command> [args...]
+
+APP_ID="org.erch.$(basename "$1")"
+LAUNCH_COMMAND="erch-launch-tui $@"
+
+exec erch-launch-or-focus "$APP_ID" "$LAUNCH_COMMAND"

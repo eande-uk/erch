@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# erch:summary=Edit, set, or reset screensaver branding
+# erch:group=branding
+# erch:name=screensaver
+# erch:args=<image|text|reset>
+# erch:examples=erch branding screensaver image | erch branding screensaver text | erch branding screensaver reset
+
+set -euo pipefail
+
+case "${1:-}" in
+image)
+  image=$(erch-menu-file "Logo image" "$HOME" "svg png")
+  if [[ -n $image ]] && erch-transcode-ascii "$image" ~/.config/erch/branding/screensaver.txt; then
+    erch-launch-screensaver force >/dev/null 2>&1
+  fi
+  ;;
+text)
+  erch-launch-editor ~/.config/erch/branding/screensaver.txt >/dev/null 2>&1 && erch-launch-screensaver force >/dev/null 2>&1
+  ;;
+reset)
+  cp "$ERCH_PATH/logo.txt" ~/.config/erch/branding/screensaver.txt && erch-launch-screensaver force >/dev/null 2>&1
+  ;;
+*)
+  echo "Usage: erch-branding-screensaver <image|text|reset>" >&2
+  exit 1
+  ;;
+esac

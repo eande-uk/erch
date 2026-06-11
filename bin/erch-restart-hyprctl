@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# erch:summary=Reload hyprland configuration (used by the erch theme switching).
+
+hyprctl reload >/dev/null

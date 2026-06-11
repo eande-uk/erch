@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# erch:summary=Print the current erch git branch
+
+echo $(git -C "$ERCH_PATH" rev-parse --abbrev-ref HEAD)

@@ -1,0 +1,6 @@
+[SddmGreeterTheme]
+Name=erch
+Description=Minimal terminal-style login theme matching the Limine bootloader aesthetic
+Author=erch
+Type=sddm-theme
+Version=1.0

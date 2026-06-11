@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# erch:summary=Set the correct power profile on boot based on current AC/battery state.
+
+if erch-battery-present && ! erch-ac-present; then
+  erch-powerprofiles-set battery
+else
+  erch-powerprofiles-set ac
+fi

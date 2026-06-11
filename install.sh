@@ -3,16 +3,16 @@
 # Exit immediately if a command exits with a non-zero status
 set -eEo pipefail
 
-# Define Omarchy locations
-export OMARCHY_PATH="$HOME/.local/share/omarchy"
-export OMARCHY_INSTALL="$OMARCHY_PATH/install"
-export OMARCHY_INSTALL_LOG_FILE="/var/log/omarchy-install.log"
-export PATH="$OMARCHY_PATH/bin:$PATH"
+# Define erch locations
+export ERCH_PATH="$HOME/.local/share/erch"
+export ERCH_INSTALL="$ERCH_PATH/install"
+export ERCH_INSTALL_LOG_FILE="/var/log/erch-install.log"
+export PATH="$ERCH_PATH/bin:$PATH"
 
 # Install
-source "$OMARCHY_INSTALL/helpers/all.sh"
-source "$OMARCHY_INSTALL/preflight/all.sh"
-source "$OMARCHY_INSTALL/packaging/all.sh"
-source "$OMARCHY_INSTALL/config/all.sh"
-source "$OMARCHY_INSTALL/login/all.sh"
-source "$OMARCHY_INSTALL/post-install/all.sh"
+source "$ERCH_INSTALL/helpers/all.sh"
+source "$ERCH_INSTALL/preflight/all.sh"
+source "$ERCH_INSTALL/packaging/all.sh"
+source "$ERCH_INSTALL/config/all.sh"
+source "$ERCH_INSTALL/login/all.sh"
+source "$ERCH_INSTALL/post-install/all.sh"

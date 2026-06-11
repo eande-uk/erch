@@ -1,6 +1,6 @@
 echo "Switch lmstudio -> lmstudio-bin"
 
 if pacman -Q lmstudio &>/dev/null; then
-  omarchy-pkg-drop lmstudio
-  omarchy-pkg-add lmstudio-bin
+  erch-pkg-drop lmstudio
+  erch-pkg-add lmstudio-bin
 fi

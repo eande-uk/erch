@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# erch:summary=Launch a floating terminal with the erch presentation wrapper
+# erch:args=<command>
+
+cmd="$*"
+exec setsid uwsm-app -- xdg-terminal-exec --app-id=org.erch.terminal --title=erch -e bash -c "erch-show-logo; $cmd; if (( \$? != 130 )); then erch-show-done; fi"

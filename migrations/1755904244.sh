@@ -1,6 +1,6 @@
-echo "Update fastfetch config with new Omarchy logo"
+echo "Update fastfetch config with new erch logo"
 
-omarchy-refresh-config fastfetch/config.jsonc
+erch-refresh-config fastfetch/config.jsonc
 
-mkdir -p ~/.config/omarchy/branding
-cp $OMARCHY_PATH/icon.txt ~/.config/omarchy/branding/about.txt
+mkdir -p ~/.config/erch/branding
+cp $ERCH_PATH/icon.txt ~/.config/erch/branding/about.txt

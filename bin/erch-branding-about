@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# erch:summary=Edit, set, or reset About branding
+# erch:group=branding
+# erch:name=about
+# erch:args=<image|text|reset>
+# erch:examples=erch branding about image | erch branding about text | erch branding about reset
+
+set -euo pipefail
+
+case "${1:-}" in
+image)
+  image=$(erch-menu-file "Logo image" "$HOME" "svg png")
+  if [[ -n $image ]] && erch-transcode-ascii "$image" ~/.config/erch/branding/about.txt --width 54 --height 26 --mode block; then
+    erch-launch-about >/dev/null 2>&1
+  fi
+  ;;
+text)
+  erch-launch-editor ~/.config/erch/branding/about.txt >/dev/null 2>&1 && erch-launch-about >/dev/null 2>&1
+  ;;
+reset)
+  cp "$ERCH_PATH/icon.txt" ~/.config/erch/branding/about.txt && erch-launch-about >/dev/null 2>&1
+  ;;
+*)
+  echo "Usage: erch-branding-about <image|text|reset>" >&2
+  exit 1
+  ;;
+esac

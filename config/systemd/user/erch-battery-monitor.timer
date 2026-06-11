@@ -1,0 +1,11 @@
+[Unit]
+Description=erch Battery Monitor Timer
+Requires=erch-battery-monitor.service
+
+[Timer]
+OnBootSec=1min
+OnUnitActiveSec=30sec
+AccuracySec=10sec
+
+[Install]
+WantedBy=timers.target

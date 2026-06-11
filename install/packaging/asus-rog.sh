@@ -1,3 +1,3 @@
-if omarchy-hw-asus-rog; then
-  omarchy-pkg-add asusctl
+if erch-hw-asus-rog; then
+  erch-pkg-add asusctl
 fi

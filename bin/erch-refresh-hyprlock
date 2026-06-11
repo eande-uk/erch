@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# erch:summary=Overwrite the user config for hyprlock with the erch default.
+
+erch-refresh-config hypr/hyprlock.conf

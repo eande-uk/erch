@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# erch:summary=Overwrite the user config for fastfetch with the erch default.
+
+erch-refresh-config fastfetch/config.jsonc

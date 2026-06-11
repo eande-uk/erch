@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# erch:summary=Overwrite the user tmux config with the erch default and reload tmux.
+
+erch-refresh-config tmux/tmux.conf
+erch-restart-tmux

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# erch:summary=Wake displays and restore brightness after idle
+# erch:group=system
+# erch:name=wake
+# erch:examples=erch system wake
+
+erch-brightness-display on
+erch-brightness-keyboard restore

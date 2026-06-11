@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# erch:summary=Ensure all default .desktop, web apps, TUIs, and npx wrappers are installed.
+
+mkdir -p ~/.local/share/icons/hicolor/48x48/apps/
+cp ~/.local/share/erch/applications/icons/*.png ~/.local/share/icons/hicolor/48x48/apps/
+gtk-update-icon-cache ~/.local/share/icons/hicolor &>/dev/null
+
+# Copy .desktop declarations
+mkdir -p ~/.local/share/applications
+cp ~/.local/share/erch/applications/*.desktop ~/.local/share/applications/
+cp ~/.local/share/erch/applications/hidden/*.desktop ~/.local/share/applications/
+
+if erch-cmd-present foot; then
+  cp ~/.local/share/erch/default/foot/foot.desktop ~/.local/share/applications/
+fi
+
+# Refresh the webapps, TUIs, and npx wrappers
+bash $ERCH_PATH/install/packaging/icons.sh
+bash $ERCH_PATH/install/packaging/webapps.sh
+bash $ERCH_PATH/install/packaging/tuis.sh
+bash $ERCH_PATH/install/packaging/npx.sh
+
+update-desktop-database ~/.local/share/applications

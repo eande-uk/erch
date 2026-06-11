@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# erch:summary=Print the installed erch version
+
+cat $ERCH_PATH/version

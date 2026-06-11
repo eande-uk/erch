@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# erch:summary=Show current monospace font
+# erch:examples=erch font current
+
+grep -oP 'font-family:\s*["'\'']?\K[^;"'\'']+' ~/.config/waybar/style.css | head -n1

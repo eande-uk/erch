@@ -1,3 +1,3 @@
 echo "Install ghui (GitHub TUI) via npx wrapper"
 
-omarchy-npx-install @kitlangton/ghui ghui
+erch-npx-install @kitlangton/ghui ghui

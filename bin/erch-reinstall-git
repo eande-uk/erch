@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# erch:summary=Reinstall the erch source directory from git
+
+set -e
+
+# Reinstall the erch configuration directory from the git source.
+
+git clone --depth=1 --branch master "https://github.com/basecamp/omarchy.git" ~/.local/share/erch-new >/dev/null
+mv $ERCH_PATH ~/.local/share/erch-old
+mv ~/.local/share/erch-new $ERCH_PATH

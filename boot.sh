@@ -3,7 +3,7 @@
 set -e
 
 # Set install mode to online since boot.sh is used for curl installations
-export OMARCHY_ONLINE_INSTALL=true
+export ERCH_ONLINE_INSTALL=true
 
 ansi_art='                 ▄▄▄
  ▄█████▄    ▄███████████▄    ▄███████   ▄███████   ▄███████   ▄█   █▄    ▄█   █▄
@@ -20,29 +20,29 @@ clear
 echo -e "\n$ansi_art\n"
 
 # Use custom branch if instructed, otherwise default to master
-OMARCHY_REF="${OMARCHY_REF:-master}"
+ERCH_REF="${ERCH_REF:-master}"
 
 # Set mirror based on branch
-if [[ $OMARCHY_REF == "dev" ]]; then
-  export OMARCHY_MIRROR=edge
+if [[ $ERCH_REF == "dev" ]]; then
+  export ERCH_MIRROR=edge
   echo 'Server = https://mirror.omarchy.org/$repo/os/$arch' | sudo tee /etc/pacman.d/mirrorlist >/dev/null
-elif [[ $OMARCHY_REF == "rc" ]]; then
-  export OMARCHY_MIRROR=rc
+elif [[ $ERCH_REF == "rc" ]]; then
+  export ERCH_MIRROR=rc
   echo 'Server = https://rc-mirror.omarchy.org/$repo/os/$arch' | sudo tee /etc/pacman.d/mirrorlist >/dev/null
 else
-  export OMARCHY_MIRROR=stable
+  export ERCH_MIRROR=stable
   echo 'Server = https://stable-mirror.omarchy.org/$repo/os/$arch' | sudo tee /etc/pacman.d/mirrorlist >/dev/null
 fi
 
 sudo pacman -Syu --noconfirm --needed git
 
 # Use custom repo if specified, otherwise default to basecamp/omarchy
-OMARCHY_REPO="${OMARCHY_REPO:-basecamp/omarchy}"
+ERCH_REPO="${ERCH_REPO:-basecamp/omarchy}"
 
-echo -e "\nCloning Omarchy from: https://github.com/${OMARCHY_REPO}.git"
-echo -e "\e[32mUsing branch: $OMARCHY_REF\e[0m"
-rm -rf ~/.local/share/omarchy/
-git clone --branch "$OMARCHY_REF" "https://github.com/${OMARCHY_REPO}.git" ~/.local/share/omarchy >/dev/null
+echo -e "\nCloning erch from: https://github.com/${ERCH_REPO}.git"
+echo -e "\e[32mUsing branch: $ERCH_REF\e[0m"
+rm -rf ~/.local/share/erch/
+git clone --branch "$ERCH_REF" "https://github.com/${ERCH_REPO}.git" ~/.local/share/erch >/dev/null
 
 echo -e "\nInstallation starting..."
-source ~/.local/share/omarchy/install.sh
+source ~/.local/share/erch/install.sh

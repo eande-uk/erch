@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# erch:summary=Install Heroic Games Launcher (Epic, GOG, Amazon Prime Gaming) with graphics drivers.
+# erch:requires-sudo=true
+
+set -e
+
+echo "Installing Heroic Games Launcher..."
+erch-pkg-add heroic-games-launcher-bin
+erch-install-gaming-gpu-lib32
+
+setsid gtk-launch heroic >/dev/null 2>&1 &

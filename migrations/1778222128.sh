@@ -1,7 +1,7 @@
 echo "Add sample post-boot hook"
 
-mkdir -p ~/.config/omarchy/hooks/post-boot.d
+mkdir -p ~/.config/erch/hooks/post-boot.d
 
-if [[ ! -f ~/.config/omarchy/hooks/post-boot.d/weather.sample ]]; then
-  cp "$OMARCHY_PATH/config/omarchy/hooks/post-boot.d/weather.sample" ~/.config/omarchy/hooks/post-boot.d/weather.sample
+if [[ ! -f ~/.config/erch/hooks/post-boot.d/weather.sample ]]; then
+  cp "$ERCH_PATH/config/erch/hooks/post-boot.d/weather.sample" ~/.config/erch/hooks/post-boot.d/weather.sample
 fi

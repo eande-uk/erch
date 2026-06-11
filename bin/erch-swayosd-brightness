@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# erch:summary=Display brightness level using SwayOSD on the current monitor.
+# erch:args=<0-100>
+# erch:examples=erch swayosd brightness 0 | erch swayosd brightness 50 | erch swayosd brightness 100
+
+percent="$1"
+
+progress="$(awk -v p="$percent" 'BEGIN{printf "%.2f", p/100}')"
+[[ $progress == "0.00" ]] && progress="0.01"
+
+erch-swayosd-client \
+  --custom-icon display-brightness-symbolic \
+  --custom-progress "$progress" \
+  --custom-progress-text "${percent}%"

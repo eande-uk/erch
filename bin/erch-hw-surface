@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# erch:summary=Detect whether the computer is a Microsoft Surface device.
+
+[[ $(cat /sys/class/dmi/id/sys_vendor 2>/dev/null) == "Microsoft Corporation" ]] &&
+  erch-hw-match "Surface"

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# erch:summary=Reload btop configuration (used by the erch theme switching).
+
+pkill -SIGUSR2 btop

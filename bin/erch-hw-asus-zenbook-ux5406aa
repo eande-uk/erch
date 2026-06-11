@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# erch:summary=Detect ASUS Zenbook UX5406AA series laptops on Intel Panther Lake.
+
+erch-hw-match "ux5406aa" && erch-hw-intel-ptl

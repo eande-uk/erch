@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# erch:summary=Launch the erch audio controls TUI (provided by wiremix).
+
+erch-launch-or-focus-tui wiremix

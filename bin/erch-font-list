@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# erch:summary=List available monospace fonts
+# erch:examples=erch font list | erch font set "CaskaydiaMono Nerd Font"
+
+fc-list :spacing=100 -f "%{family[0]}\n" | grep -v -i -E 'emoji|signwriting|erch' | sort -u

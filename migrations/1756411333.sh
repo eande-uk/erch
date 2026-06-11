@@ -1,3 +1,3 @@
-echo "Use new Omarchy mirror as default"
+echo "Use new erch mirror as default"
 
-omarchy-refresh-pacman
+erch-refresh-pacman

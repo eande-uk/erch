@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# erch:summary=Reset all erch user configs to the defaults
+# erch:requires-sudo=true
+
+set -e
+
+# Overwrite all user configs with the erch defaults.
+
+if (( EUID == 0 )); then
+  echo "Error: This script should not be run as root"
+  exit 1
+fi
+
+echo "Resetting all erch configs"
+cp -R ~/.local/share/erch/config/* ~/.config/
+cp ~/.local/share/erch/default/bashrc ~/.bashrc
+echo '[[ -f ~/.bashrc ]] && . ~/.bashrc' | tee ~/.bash_profile >/dev/null
+
+$(bash $ERCH_PATH/install/config/theme.sh)
+
+erch-refresh-limine
+erch-refresh-plymouth
+erch-nvim-setup

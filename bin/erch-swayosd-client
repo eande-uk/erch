@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# erch:summary=Wrapper for swayosd-client that targets the currently focused monitor.
+# erch:args=<swayosd-client-args...>
+
+exec swayosd-client --monitor "$(erch-hyprland-monitor-focused)" "$@"

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# erch:summary=Overwrite the user configs for swayosd (controls on-screen feedback for changing volume/songs etc) with the erch defaults and restart the service.
+
+erch-refresh-config swayosd/config.toml
+erch-refresh-config swayosd/style.css
+erch-restart-swayosd

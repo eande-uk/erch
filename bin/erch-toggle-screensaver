@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# erch:summary=Toggle screensaver availability
+
+erch-toggle \
+  --enabled-notification "󱄄   Screensaver disabled" \
+  --disabled-notification "󱄄   Screensaver enabled" \
+  screensaver-off

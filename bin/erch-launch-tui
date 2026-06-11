@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# erch:summary=Launch a TUI command in the default terminal with erch styling
+# erch:args=<command> [args...]
+
+exec setsid uwsm-app -- xdg-terminal-exec --app-id=org.erch.$(basename $1) -e "$1" "${@:2}"

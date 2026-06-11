@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# erch:summary=Launch the erch wifi controls (provided by the Impala TUI).
+
+rfkill unblock wifi
+erch-launch-or-focus-tui impala

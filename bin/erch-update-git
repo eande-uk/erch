@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# erch:summary=Pull the latest erch git changes
+
+set -e
+
+echo -e "\e[32mUpdate erch\e[0m"
+
+erch-update-time
+
+# Suppress Hyprland config errors while git updates default config files mid-pull
+hyprctl keyword debug:suppress_errors true &>/dev/null || true
+
+git -C $ERCH_PATH pull --autostash
+git -C $ERCH_PATH --no-pager diff --check || git -C $ERCH_PATH reset --merge
+
+hyprctl reload &>/dev/null || true

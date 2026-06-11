@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# erch:summary=Install Zed Editor and configure it with the current erch theme
+
+echo "Installing Zed Editor..."
+erch-pkg-add zed omazed
+
+# Apply erch theme to Zed
+omazed setup
+
+setsid gtk-launch dev.zed.Zed

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# erch:summary=Launch the erch bluetooth controls TUI (provided by bluetui).
+
+rfkill unblock bluetooth
+exec erch-launch-or-focus-tui bluetui

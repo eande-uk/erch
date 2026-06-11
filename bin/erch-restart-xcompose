@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# erch:summary=Restart the XCompose input method service (fcitx5) to apply new compose key settings.
+
+erch-restart-app fcitx5 --disable notificationitem

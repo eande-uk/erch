@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# erch:summary=Check if a toggle is enabled (flag file exists)
+# erch:args=<flag-name>
+
+[[ -f "$HOME/.local/state/erch/toggles/$1" ]]
