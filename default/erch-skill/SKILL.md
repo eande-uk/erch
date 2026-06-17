@@ -416,7 +416,7 @@ Every directory has a README.md that briefly explains:
 - **Why** it exists
 - **How** to use it (with cross-references to `docs/`)
 
-See `default/project-docs/PATTERN.md` for the full standard.
+See `~/.config/agent/config/workflows/project-documentation.md` for the full standard.
 
 ## Out of Scope
 

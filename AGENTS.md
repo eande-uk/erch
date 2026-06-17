@@ -131,7 +131,7 @@ When creating a new directory, add a README.md that covers:
 - **How** to use it (brief — cross-ref to deeper docs)
 - **Cross-references** to relevant sections in `docs/`
 
-Follow the pattern in `default/project-docs/PATTERN.md`.
+Follow the pattern in `~/.config/agent/config/workflows/project-documentation.md`.
 
 # Migrations
 
