@@ -29,5 +29,9 @@ go
 # ── Database libs ────────────────────────────────────────
 # postgresql-libs in common
 
+# ── Documentation ──────────────────────────────────────────
+pandoc
+mdbook
+
 # ── AI coding ────────────────────────────────────────────
 # opencode installed via NPX by default for work/school

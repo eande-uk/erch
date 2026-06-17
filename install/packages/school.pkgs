@@ -13,5 +13,9 @@ xournalpp
 # ── Development tools ────────────────────────────────────
 tobi-try
 
+# ── Documentation ──────────────────────────────────────────
+pandoc
+mdbook
+
 # ── AI coding ────────────────────────────────────────────
 # opencode installed via NPX by default for work/school

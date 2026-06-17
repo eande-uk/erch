@@ -83,4 +83,13 @@ jobs:
             echo "$overlap"
             exit 1
           fi
-          echo "✓ Package files valid"
+            echo "✓ Package files valid"
+
+  wiki:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install test deps
+        run: sudo apt-get update && sudo apt-get install -y jq pandoc
+      - name: Run wiki tests
+        run: bash test/erch-wiki-test.sh

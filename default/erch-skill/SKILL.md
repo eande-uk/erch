@@ -122,6 +122,7 @@ Run `erch --help` for the full list. The most common groups:
 | `erch pkg` | Package management | `erch pkg install <pkg>` |
 | `erch setup` | Initial setup tasks | `erch setup fingerprint` |
 | `erch update` | System updates | `erch update` |
+| `erch wiki` | Wiki and notes (mdbook, pandoc, serve) | `erch wiki init ./docs` |
 
 ## Configuration Locations
 
