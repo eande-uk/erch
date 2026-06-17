@@ -1,7 +1,9 @@
-erch-npx-install @openai/codex codex
-erch-npx-install @google/gemini-cli gemini
-erch-npx-install @github/copilot copilot
-erch-npx-install opencode-ai opencode
-erch-npx-install playwright playwright-cli
-erch-npx-install @earendil-works/pi-coding-agent pi
-erch-npx-install @kitlangton/ghui ghui
+# Install NPX wrappers by profile
+# Only opencode is installed by default, and only for work/school.
+# Other NPX wrappers (pi, codex, etc.) are available post-install.
+
+case "$ERCH_PROFILE" in
+  work|school|all)
+    erch-npx-install opencode-ai opencode
+    ;;
+esac

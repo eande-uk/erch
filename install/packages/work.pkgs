@@ -1,0 +1,33 @@
+# ── Office ────────────────────────────────────────────────
+libreoffice-fresh
+
+# ── Mail & calendar ──────────────────────────────────────
+thunderbird
+
+# ── Tasks & project management ───────────────────────────
+taskwarrior
+
+# ── Development tools ────────────────────────────────────
+git
+github-cli
+lazygit
+lazydocker
+tobi-try
+
+# ── Containers ───────────────────────────────────────────
+docker
+docker-compose
+docker-buildx
+
+# ── Languages & toolchains ───────────────────────────────
+rust
+clang
+llvm
+ruby
+go
+
+# ── Database libs ────────────────────────────────────────
+# postgresql-libs in common
+
+# ── AI coding ────────────────────────────────────────────
+# opencode installed via NPX by default for work/school

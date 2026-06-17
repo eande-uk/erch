@@ -1,0 +1,17 @@
+# ── Office ────────────────────────────────────────────────
+libreoffice-fresh
+
+# ── Mail & calendar ──────────────────────────────────────
+thunderbird
+
+# ── Tasks & project management ───────────────────────────
+taskwarrior
+
+# ── Writing & annotation ─────────────────────────────────
+xournalpp
+
+# ── Development tools ────────────────────────────────────
+tobi-try
+
+# ── AI coding ────────────────────────────────────────────
+# opencode installed via NPX by default for work/school
