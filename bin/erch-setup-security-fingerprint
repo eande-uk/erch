@@ -53,6 +53,8 @@ echo -e "\e[32mSetting up fingerprint scanner for authentication.\n\e[0m"
 # Install required packages
 echo "Installing required packages..."
 
+installed_libfprint=$(pacman -Qq libfprint 2>/dev/null || true)
+
 # libfprint-git provides+conflicts libfprint; pacman -S --noconfirm
 # defaults the conflict prompt to N and aborts. Pre-remove libfprint
 # with -Rdd so the install goes silent. -Rdd (not erch-pkg-drop's
