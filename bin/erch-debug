@@ -74,17 +74,8 @@ ACTION=$(gum choose "${OPTIONS[@]}")
 
 case "$ACTION" in
   "Upload log")
-    echo "Uploading debug log to logs.omarchy.org..."
-    URL=$(curl -sf -F "file=@$LOG_FILE" https://logs.omarchy.org/)
-    if (( $? == 0 )) && [[ -n $URL ]]; then
-      echo "✓ Log uploaded successfully!"
-      echo "Share this URL:"
-      echo ""
-      echo "  $URL"
-    else
-      echo "Error: Failed to upload log file"
-      exit 1
-    fi
+    echo "✓ Debug log saved at $LOG_FILE"
+    echo "  File size: $(wc -c < "$LOG_FILE") bytes"
     ;;
   "View log")
     less "$LOG_FILE"
