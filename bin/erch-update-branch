@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # erch:summary=Switch erch branches and update from the selected branch
-# erch:args=<master>
+# erch:args=<master|rc|dev>
 
 set -e
 
 if (($# == 0)); then
-  echo "Usage: erch-update-branch [master]"
+  echo "Usage: erch-update-branch [master|rc|dev]"
   exit 1
 fi
 

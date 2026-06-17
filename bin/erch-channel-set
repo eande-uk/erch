@@ -13,9 +13,9 @@ fi
 
 case "$channel" in
 "stable") erch-branch-set "master" && erch-refresh-pacman "stable" ;;
-"rc") erch-branch-set "master" && erch-refresh-pacman "rc" ;;
+"rc") erch-branch-set "rc" && erch-refresh-pacman "rc" ;;
 "edge") erch-branch-set "master" && erch-refresh-pacman "edge" ;;
-"dev") erch-branch-set "master" && erch-refresh-pacman "edge" ;;
+"dev") erch-branch-set "dev" && erch-refresh-pacman "edge" ;;
 *) echo "Unknown channel: $channel"; exit 1; ;;
 esac
 
