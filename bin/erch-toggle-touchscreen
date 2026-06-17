@@ -28,5 +28,5 @@ disable() {
 case "${1:-toggle}" in
   on) enable ;;
   off) disable ;;
-  toggle) if [[ -f $STATE_CONF ]]; then enable; else disable; fi ;;
+  toggle) if [[ -f $STATE_FILE ]]; then enable; else disable; fi ;;
 esac

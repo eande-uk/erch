@@ -4,6 +4,10 @@
 
 echo
 
+confirm_reboot() {
+  gum confirm "$1" && { omarchy-system-reboot; exit 0; }
+}
+
 running_kernel=$(uname -r)
 kernel_updated=true
 
