@@ -371,6 +371,53 @@ erch reminder show
 erch reminder clear
 ```
 
+## Documentation
+
+Every E&E project follows a standard documentation pattern. When working with docs, follow these conventions.
+
+### Project Docs Structure
+
+```
+<project>/
+├── README.md              ← What, why, quick start, links to deeper docs
+├── docs/
+│   ├── README.md          ← Index of all documentation
+│   ├── ARCHITECTURE.md    ← System design with Mermaid diagrams
+│   ├── VISION.md          ← Product direction
+│   ├── ROADMAP.md         ← Phased plan with milestone status
+│   ├── FEATURES.md        ← Feature inventory by layer
+│   └── manual/            ← User-facing guide (mdbook)
+└── <component>/
+    └── README.md          ← What lives here, why, how to use, cross-refs
+```
+
+### User Manual
+
+The `docs/manual/` directory is an mdbook project. Chapters follow this structure:
+
+| Section | Content |
+|---------|---------|
+| Welcome | What is this project, who is it for |
+| Getting Started | Installation, first steps |
+| Navigation | Keybindings, workflow |
+| Themes | Visual customization |
+| Hotkeys | Keyboard shortcut reference |
+| CLI | Command reference |
+| Applications | Included software |
+| Configuration | File locations, customization |
+| [Feature] | Project-specific chapter |
+| Troubleshooting | Common issues |
+
+### Per-Directory READMEs
+
+Every directory has a README.md that briefly explains:
+
+- **What** lives here
+- **Why** it exists
+- **How** to use it (with cross-references to `docs/`)
+
+See `default/project-docs/PATTERN.md` for the full standard.
+
 ## Out of Scope
 
 This skill intentionally does not cover erch source development. Do not use this skill for:
