@@ -1,152 +1,34 @@
-# erch core package list installed via install/packaging/base.sh
-# This file is also used by the ISO builder when determining needs
+# erch core package list — union of common + all profiles
+# Used by the ISO builder to ensure package availability.
+# The install pipeline selects by profile (see install/packages/).
 
-1password-beta
-1password-cli
-aether
-alacritty
-alsa-utils
-asdcontrol
-avahi
-bash-completion
-bat
-bluetui
-bolt
-brightnessctl
-btop
-chromium
-clang
-claude-code
-cliamp
-cups
-cups-browsed
-cups-filters
-cups-pdf
-docker
-docker-buildx
-docker-compose
-dosfstools
-dotnet-runtime-9.0
-dust
-evince
-exfatprogs
-expac
-eza
-fastfetch
-fcitx5
-fcitx5-gtk
-fcitx5-qt
-fd
-ffmpegthumbnailer
-fontconfig
-fzf
-github-cli
-gnome-calculator
-gnome-keyring
-gnome-themes-extra
-grim
-gpu-screen-recorder
-gum
-gvfs-mtp
-gvfs-nfs
-gvfs-smb
-hypridle
-hyprland
-hyprland-guiutils
-hyprland-preview-share-picker
-hyprlock
-hyprpicker
-hyprsunset
-imagemagick
-impala
-imv
-inetutils
-inxi
-iwd
-jq
-kdenlive
-kernel-modules-hook
-kvantum-qt5
-lazydocker
-lazygit
-less
-libsecret
-libyaml
-libqalculate
-libreoffice-fresh
-llvm
-localsend
-luarocks
-mako
-man-db
-mariadb-libs
-mise
-mpv
-nautilus
-nautilus-python
-gnome-disk-utility
-noto-fonts
-noto-fonts-cjk
-noto-fonts-emoji
-nss-mdns
-nvim
-obs-studio
-obsidian
-erch-nvim
-erch-walker
-pamixer
-pinta
-playerctl
-plocate
-plymouth
-polkit-gnome
-postgresql-libs
-power-profiles-daemon
-python-gobject
-python-poetry-core
-python-terminaltexteffects
-qt5-wayland
-ripgrep
-ruby
-rust
-satty
-sddm
-signal-desktop
-slurp
-spotify
-socat
-starship
-sushi
-swaybg
-swayosd
-system-config-printer
-tesseract
-tesseract-data-eng
-tldr
-tree-sitter-cli
-tmux
-tobi-try
-ttf-ia-writer
-ttf-jetbrains-mono-nerd
-typora
-tzupdate
-ufw
-ufw-docker
-unzip
-usage
-uwsm
-waybar
-whois
-wireless-regdb
-wiremix
-wireplumber
+# ── Common ─────────────────────────────────────────────────
+hyprland hypridle hyprlock hyprpicker hyprsunset hyprland-guiutils hyprland-preview-share-picker
+uwsm swaybg swayosd mako waybar erch-walker sddm plymouth
+alacritty starship zoxide fzf bat eza ripgrep tmux less fastfetch tldr
+nvim erch-nvim chromium
+nautilus nautilus-python gnome-disk-utility gvfs-mtp gvfs-nfs gvfs-smb
+imv grim slurp satty imagemagick
+mpv obs-studio kdenlive ffmpegthumbnailer
+pipewire pipewire-alsa pipewire-jack pipewire-pulse wireplumber pamixer cliamp alsa-utils
+noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-ia-writer ttf-jetbrains-mono-nerd woff2-font-awesome
+gopass
+ufw plocate tzupdate power-profiles-daemon socat dosfstools exfatprogs bolt avahi nss-mdns inetutils iwd wireless-regdb
+fd jq gum inxi man-db unzip whois xmlstarlet expac
+cups cups-browsed cups-filters cups-pdf system-config-printer
 wl-clipboard
-woff2-font-awesome
-xdg-desktop-portal-gtk
-xdg-desktop-portal-hyprland
-xdg-terminal-exec
-xmlstarlet
+xdg-desktop-portal-gtk xdg-desktop-portal-hyprland xdg-terminal-exec
+fontconfig libsecret libyaml libqalculate postgresql-libs python-gobject python-terminaltexteffects python-poetry-core
+fcitx5 fcitx5-gtk fcitx5-qt qt5-wayland kvantum-qt5
+polkit-gnome playerctl sushi
+
+# ── All profiles (work + school + game) ────────────────────
+libreoffice-fresh
+thunderbird
+taskwarrior
 xournalpp
-yaru-icon-theme
-yay
-zoxide
+tobi-try
+git github-cli lazygit lazydocker
+docker docker-compose docker-buildx
+rust clang llvm ruby go
+steam lutris mangohud gamemode
