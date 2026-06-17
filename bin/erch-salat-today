@@ -1,0 +1,97 @@
+#!/bin/bash
+# erch:summary=Fetch and cache today's salat times
+
+CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/erch/salat.conf"
+CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/erch"
+CACHE_FILE="$CACHE_DIR/salat.json"
+CACHE_TTL=21600
+API_BASE="https://api.aladhan.com/v1/timingsByCity"
+METHOD_NAMES=(
+  "Karachi (University of Islamic Sciences)"
+  "ISNA (Islamic Society of North America)"
+  "MWL (Muslim World League)"
+  "Makkah (Umm Al-Qura)"
+  "Egypt (Egyptian General Authority)"
+  "Tehran (Institute of Geophysics, University of Tehran)"
+  "Jafari (Shia Ithna Ashari)"
+)
+
+SALAT_TZ=""
+SALAT_CITY=""
+SALAT_COUNTRY=""
+SALAT_METHOD=2
+SALAT_LANG="ar"
+
+if [[ -f $CONFIG ]]; then
+  source "$CONFIG"
+fi
+
+TZ="${SALAT_TZ:-$(timedatectl show --property=Timezone --value 2>/dev/null || echo UTC)}"
+mkdir -p "$CACHE_DIR"
+
+fetch_needed=true
+if [[ -f $CACHE_FILE ]]; then
+  cache_age=$(($(date +%s) - $(date -r "$CACHE_FILE" +%s)))
+  if (( cache_age < CACHE_TTL )); then
+    fetch_needed=false
+  fi
+fi
+
+if [[ $fetch_needed == true && -n $SALAT_CITY && -n $SALAT_COUNTRY ]]; then
+  api_url="${API_BASE}?city=${SALAT_CITY}&country=${SALAT_COUNTRY}&method=${SALAT_METHOD}"
+  response=$(curl -fsS --max-time 5 "$api_url" 2>/dev/null)
+  if echo "$response" | jq -er '.data.timings' >/dev/null 2>&1; then
+    echo "$response" > "$CACHE_FILE"
+  fi
+fi
+
+if [[ ! -f $CACHE_FILE ]]; then
+  if [[ $1 == "--json" ]]; then
+    echo '{}'
+  else
+    echo "Salat unavailable"
+  fi
+  exit 1
+fi
+
+if [[ $1 == "--json" ]]; then
+  cat "$CACHE_FILE"
+  exit 0
+fi
+
+data=$(cat "$CACHE_FILE")
+
+hijri_date=$(echo "$data" | jq -r '.data.date.hijri.day + " " + .data.date.hijri.month.en + " " + .data.date.hijri.year' 2>/dev/null)
+prayers=("Fajr" "Sunrise" "Dhuhr" "Asr" "Maghrib" "Isha")
+
+if [[ $SALAT_LANG == "ar" ]]; then
+  names=("الفجر" "الشروق" "الظهر" "العصر" "المغرب" "العشاء")
+  next_label="التالي"
+else
+  names=("Fajr" "Sunrise" "Dhuhr" "Asr" "Maghrib" "Isha")
+  next_label="Next"
+fi
+
+now_epoch=$(TZ=$TZ date +%H:%M)
+next_idx=-1
+for i in "${!prayers[@]}"; do
+  pt=$(echo "$data" | jq -r ".data.timings.${prayers[$i]}" 2>/dev/null)
+  if [[ $pt > $now_epoch ]]; then
+    next_idx=$i
+    break
+  fi
+done
+if (( next_idx == -1 )); then
+  next_idx=0
+fi
+
+echo "$hijri_date"
+echo "─────────────────"
+for i in "${!prayers[@]}"; do
+  pt=$(echo "$data" | jq -r ".data.timings.${prayers[$i]}" 2>/dev/null)
+  if (( i == next_idx )); then
+    printf '%-12s %s  ← %s\n' "${names[$i]}" "$pt" "$next_label"
+  else
+    printf '%-12s %s\n' "${names[$i]}" "$pt"
+  fi
+done

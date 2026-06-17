@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Show today's salat schedule after erch has started.
+# To put it into use, remove .sample from this file name.
+
+schedule=$(erch-salat-today 2>/dev/null) || true
+
+if [[ -n $schedule && $schedule != "Salat unavailable" ]]; then
+  notify-send -u low "$schedule"
+fi

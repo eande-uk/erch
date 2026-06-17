@@ -1,0 +1,247 @@
+#!/bin/bash
+# erch:summary=Configure salat location and preferences
+# erch:group=salat
+# erch:name=config
+# erch:args=
+# erch:examples=erch salat config
+
+CONFIG_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/erch/salat.conf"
+CONFIG_DIR=$(dirname "$CONFIG_FILE")
+mkdir -p "$CONFIG_DIR"
+
+# Read existing config if present
+SALAT_TZ=""
+SALAT_CITY=""
+SALAT_COUNTRY=""
+SALAT_METHOD=2
+SALAT_LANG="ar"
+SALAT_ADHAN=false
+
+[[ -f $CONFIG_FILE ]] && source "$CONFIG_FILE"
+
+# ── Timezone ──────────────────────────────────────────────
+current_tz="${SALAT_TZ:-$(timedatectl show --property=Timezone --value 2>/dev/null || echo UTC)}"
+echo "Current timezone: $current_tz"
+echo -n "Change timezone? [y/N] "; read -r yn
+if [[ $yn == [yY] ]]; then
+  echo
+  echo "Available timezones (type a keyword to search, or enter full name):"
+  timedatectl list-timezones | fzf --height=15 --prompt="Select timezone: " && echo
+  selected_tz=$(timedatectl list-timezones | fzf --height=15 --prompt="Select timezone: ")
+  if [[ -n $selected_tz ]]; then
+    SALAT_TZ=$selected_tz
+  fi
+else
+  SALAT_TZ=$current_tz
+fi
+
+# ── Auto-detect city/country from TZ ─────────────────────
+tz_to_city_country() {
+  local tz=$1
+  local city country
+
+  # Extract last component of TZ name
+  city=$(basename "$tz" | sed 's/_/ /g')
+
+  # Map area to country
+  local area="${tz%%/*}"
+  case "$area" in
+    Europe)
+      case "$city" in
+        London|Belfast|Cardiff) country="UK" ;;
+        Paris|Strasbourg) country="France" ;;
+        Berlin|Hamburg|Munich|Frankurt|Stuttgart) country="Germany" ;;
+        Madrid|Barcelona) country="Spain" ;;
+        Rome|Milan|Venice) country="Italy" ;;
+        Amsterdam) country="Netherlands" ;;
+        Brussels) country="Belgium" ;;
+        Vienna) country="Austria" ;;
+        Bern|Zurich|Geneva) country="Switzerland" ;;
+        Stockholm) country="Sweden" ;;
+        Oslo) country="Norway" ;;
+        Copenhagen) country="Denmark" ;;
+        Helsinki) country="Finland" ;;
+        Dublin) country="Ireland" ;;
+        Lisbon) country="Portugal" ;;
+        Warsaw) country="Poland" ;;
+        Prague) country="Czech Republic" ;;
+        Budapest) country="Hungary" ;;
+        Bucharest) country="Romania" ;;
+        Sofia) country="Bulgaria" ;;
+        Athens) country="Greece" ;;
+        Istanbul) country="Turkey" ;;
+        Moscow|Saint_Petersburg) country="Russia" ;;
+        Kiev|Kyiv) country="Ukraine" ;;
+        *) country="" ;;
+      esac ;;
+    America)
+      case "$city" in
+        New_York|Washington|Chicago|San_Francisco|Los_Angeles|Boston|Miami|Seattle|Atlanta|Denver|Phoenix|Houston|Dallas) country="US" ;;
+        Toronto|Ottawa|Vancouver|Montreal|Calgary) country="Canada" ;;
+        Mexico_City) country="Mexico" ;;
+        Sao_Paulo|Rio_de_Janeiro|Brasilia) country="Brazil" ;;
+        Buenos_Aires) country="Argentina" ;;
+        Lima) country="Peru" ;;
+        Bogota) country="Colombia" ;;
+        Santiago) country="Chile" ;;
+        *) country="" ;;
+      esac ;;
+    Asia)
+      case "$city" in
+        Riyadh|Jeddah|Makkah|Medina|Dammam) country="Saudi Arabia" ;;
+        Dubai|Abu_Dhabi) country="UAE" ;;
+        Doha) country="Qatar" ;;
+        Muscat) country="Oman" ;;
+        Kuwait) country="Kuwait" ;;
+        Bahrain) country="Bahrain" ;;
+        Amman) country="Jordan" ;;
+        Beirut) country="Lebanon" ;;
+        Baghdad) country="Iraq" ;;
+        Damascus) country="Syria" ;;
+        Jerusalem|Tel_Aviv) country="Israel" ;;
+        Ankara|Istanbul) country="Turkey" ;;
+        Tehran|Shiraz|Mashhad|Esfahan) country="Iran" ;;
+        Karachi|Lahore|Islamabad) country="Pakistan" ;;
+        Delhi|Mumbai|Kolkata|Chennai|Bangalore|Hyderabad) country="India" ;;
+        Dhaka) country="Bangladesh" ;;
+        Jakarta) country="Indonesia" ;;
+        Kuala_Lumpur) country="Malaysia" ;;
+        Singapore) country="Singapore" ;;
+        Bangkok) country="Thailand" ;;
+        Hanoi|Ho_Chi_Minh) country="Vietnam" ;;
+        Manila) country="Philippines" ;;
+        Tokyo|Osaka) country="Japan" ;;
+        Seoul) country="South Korea" ;;
+        Beijing|Shanghai|Guangzhou) country="China" ;;
+        Taipei) country="Taiwan" ;;
+        Kabul) country="Afghanistan" ;;
+        Tashkent) country="Uzbekistan" ;;
+        Almaty) country="Kazakhstan" ;;
+        *) country="" ;;
+      esac ;;
+    Africa)
+      case "$city" in
+        Cairo|Alexandria) country="Egypt" ;;
+        Casablanca|Rabat) country="Morocco" ;;
+        Algiers) country="Algeria" ;;
+        Tunis) country="Tunisia" ;;
+        Tripoli) country="Libya" ;;
+        Khartoum) country="Sudan" ;;
+        Addis_Ababa) country="Ethiopia" ;;
+        Nairobi) country="Kenya" ;;
+        Lagos|Abuja) country="Nigeria" ;;
+        Dakar) country="Senegal" ;;
+        Accra) country="Ghana" ;;
+        Johannesburg|Cape_Town) country="South Africa" ;;
+        Dar_es_Salaam) country="Tanzania" ;;
+        *) country="" ;;
+      esac ;;
+    Australia) country="Australia" ;;
+    Pacific) country="" ;;
+    Indian) country="" ;;
+    Atlantic) country="" ;;
+    *) country="" ;;
+  esac
+
+  echo "${city}:${country}"
+}
+
+tz_data=$(tz_to_city_country "$SALAT_TZ")
+detected_city="${tz_data%%:*}"
+detected_country="${tz_data##*:}"
+
+echo
+echo "Detected location from timezone:"
+echo "  City:    ${detected_city:-$SALAT_CITY}"
+echo "  Country: ${detected_country:-$SALAT_COUNTRY}"
+
+echo -n "Edit city? [y/N] "; read -r yn
+if [[ $yn == [yY] ]]; then
+  echo -n "City: "; read -r input
+  [[ -n $input ]] && SALAT_CITY=$input
+else
+  [[ -n $detected_city ]] && SALAT_CITY=$detected_city
+fi
+
+echo -n "Edit country? [y/N] "; read -r yn
+if [[ $yn == [yY] ]]; then
+  echo -n "Country: "; read -r input
+  [[ -n $input ]] && SALAT_COUNTRY=$input
+else
+  [[ -n $detected_country ]] && SALAT_COUNTRY=$detected_country
+fi
+
+# ── Calculation method ───────────────────────────────────
+echo
+echo "Select calculation method:"
+echo "  1) University of Islamic Sciences, Karachi"
+echo "  2) ISNA (Islamic Society of North America)"
+echo "  3) MWL (Muslim World League)"
+echo "  4) Umm Al-Qura, Makkah"
+echo "  5) Egyptian General Authority"
+echo "  7) Tehran, Iran"
+echo "  8) Gulf Region"
+echo "  9) Kuwait"
+echo " 10) Qatar"
+echo " 11) Singapore"
+echo " 12) UOIF (France)"
+echo " 13) Diyanet (Turkey)"
+echo " 14) Russia"
+echo " 15) Moonsighting Committee"
+echo
+echo -n "Method [${SALAT_METHOD}]: "; read -r input
+input="${input:-$SALAT_METHOD}"
+if [[ $input =~ ^[0-9]+$ ]]; then
+  SALAT_METHOD=$input
+fi
+
+# ── Language ─────────────────────────────────────────────
+echo
+echo -n "Use Arabic prayer names? [Y/n]: "; read -r yn
+if [[ $yn == [nN] ]]; then
+  SALAT_LANG="en"
+else
+  SALAT_LANG="ar"
+fi
+
+# ── Adhan notifications ──────────────────────────────────
+echo
+echo -n "Enable adhan (prayer) notifications? [y/N]: "; read -r yn
+if [[ $yn == [yY] ]]; then
+  SALAT_ADHAN=true
+else
+  SALAT_ADHAN=false
+fi
+
+# ── Write config ─────────────────────────────────────────
+cat > "$CONFIG_FILE" <<EOF
+# erch salat configuration.
+# Created by erch-salat-config. Edit or re-run the wizard to change.
+
+SALAT_TZ="$SALAT_TZ"
+SALAT_CITY="$SALAT_CITY"
+SALAT_COUNTRY="$SALAT_COUNTRY"
+SALAT_METHOD=$SALAT_METHOD
+SALAT_LANG="$SALAT_LANG"
+SALAT_ADHAN=$SALAT_ADHAN
+EOF
+
+echo
+echo "Config written to $CONFIG_FILE"
+
+# ── Optional: install adhan service/timer ────────────────
+if [[ $SALAT_ADHAN == true ]]; then
+  SERVICE_SRC=$(erch --path 2>/dev/null || echo "$HOME/.local/share/erch")/config/systemd/user
+  if [[ -d $SERVICE_SRC ]]; then
+    mkdir -p "$HOME/.config/systemd/user"
+    cp "$SERVICE_SRC/erch-salat-adhan.service" "$HOME/.config/systemd/user/"
+    cp "$SERVICE_SRC/erch-salat-adhan.timer" "$HOME/.config/systemd/user/"
+    systemctl --user daemon-reload
+    systemctl --user enable --now erch-salat-adhan.timer
+    echo "Adhan notifications enabled."
+  else
+    echo "Warning: Could not find systemd service files to install."
+  fi
+fi
+
+echo "Done. Restart Waybar to see the salat module."

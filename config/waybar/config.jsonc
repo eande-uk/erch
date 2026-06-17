@@ -7,6 +7,7 @@
   "modules-left": ["custom/erch", "hyprland/workspaces"],
   "modules-center": ["clock", "custom/weather", "custom/update", "custom/voxtype", "custom/screenrecording-indicator", "custom/idle-indicator", "custom/notification-silencing-indicator"],
   "modules-right": [
+    "custom/salat",
     "group/tray-expander",
     "bluetooth",
     "network",
@@ -72,6 +73,13 @@
     "interval": 60,
     "tooltip": false,
     "on-click": "notify-send -u low \"$(erch-weather-status)\""
+  },
+  "custom/salat": {
+    "exec": "$ERCH_PATH/default/waybar/salat.sh",
+    "return-type": "json",
+    "interval": 60,
+    "tooltip": true,
+    "on-click": "notify-send -u low \"$(erch-salat-today)\""
   },
   "network": {
     "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],

@@ -1,0 +1,101 @@
+#!/bin/bash
+# erch:summary=Print next prayer name, countdown, and progress bar
+
+CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/erch/salat.conf"
+
+SALAT_TZ=""
+SALAT_LANG="ar"
+
+if [[ -f $CONFIG ]]; then
+  source "$CONFIG"
+fi
+
+TZ="${SALAT_TZ:-$(timedatectl show --property=Timezone --value 2>/dev/null || echo UTC)}"
+
+if [[ $SALAT_LANG == "ar" ]]; then
+  names=("الفجر" "الشروق" "الظهر" "العصر" "المغرب" "العشاء")
+else
+  names=("Fajr" "Sunrise" "Dhuhr" "Asr" "Maghrib" "Isha")
+fi
+prayers=("Fajr" "Sunrise" "Dhuhr" "Asr" "Maghrib" "Isha")
+
+data=$(erch-salat-today --json 2>/dev/null) || { echo "error"; exit 1; }
+if ! echo "$data" | jq -er '.data.timings' >/dev/null 2>&1; then
+  echo "error"
+  exit 1
+fi
+
+now_epoch=$(TZ=$TZ date +%s)
+now_time=$(TZ=$TZ date +%H:%M)
+
+# Convert prayer time (HH:MM) to today's epoch
+time_to_epoch() {
+  local t=$1
+  TZ=$TZ date -d "$t" +%s 2>/dev/null || echo 0
+}
+
+next_idx=-1
+prev_idx=-1
+next_epoch=0
+prev_epoch=0
+
+for i in "${!prayers[@]}"; do
+  pt=$(echo "$data" | jq -r ".data.timings.${prayers[$i]}" 2>/dev/null)
+  pt_epoch=$(time_to_epoch "$pt")
+  if (( pt_epoch > now_epoch )); then
+    next_idx=$i
+    next_epoch=$pt_epoch
+    break
+  fi
+  prev_idx=$i
+  prev_epoch=$pt_epoch
+done
+
+# If no next prayer found today, first prayer tomorrow is next
+if (( next_idx == -1 )); then
+  next_idx=0
+  next_epoch=$(time_to_epoch "$(echo "$data" | jq -r ".data.timings.${prayers[0]}" 2>/dev/null)")
+  next_epoch=$((next_epoch + 86400))
+  prev_idx=$(( ${#prayers[@]} - 1 ))
+  pt=$(echo "$data" | jq -r ".data.timings.${prayers[$prev_idx]}" 2>/dev/null)
+  prev_epoch=$(time_to_epoch "$pt")
+fi
+
+if (( prev_idx == -1 )); then
+  # Before Fajr — prev is Isha from "yesterday" (just use Isha time for interval calc)
+  prev_epoch=$((next_epoch - 86400))
+  prev_idx=$(( ${#prayers[@]} - 1 ))
+fi
+
+diff=$((next_epoch - now_epoch))
+if (( diff < 0 )); then
+  diff=0
+fi
+
+hours=$((diff / 3600))
+mins=$(((diff % 3600) / 60))
+if (( hours > 0 )); then
+  countdown=$(printf '%d:%02d' "$hours" "$mins")
+else
+  countdown=$(printf '%d' "$mins")
+fi
+
+interval=$((next_epoch - prev_epoch))
+elapsed=$((now_epoch - prev_epoch))
+if (( interval <= 0 )); then
+  progress=0
+else
+  progress=$((elapsed * 10 / interval))
+fi
+if (( progress < 0 )); then
+  progress=0
+elif (( progress > 10 )); then
+  progress=10
+fi
+
+filled=""
+empty=""
+for ((b=0; b<progress; b++)); do filled="${filled}▰"; done
+for ((b=progress; b<10; b++)); do empty="${empty}▱"; done
+
+printf '%s\t%s\t%s\t%s\t%s\n' "${names[$next_idx]}" "$countdown" "${filled}${empty}" "$progress" "$diff"

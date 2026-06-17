@@ -1,0 +1,43 @@
+#!/bin/bash
+# erch:summary=Send notification at prayer time
+# erch:group=salat
+# erch:name=adhan
+# erch:hidden=true
+
+CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/erch/salat.conf"
+
+SALAT_TZ=""
+SALAT_LANG="ar"
+SALAT_ADHAN=false
+
+if [[ -f $CONFIG ]]; then
+  source "$CONFIG"
+fi
+
+[[ $SALAT_ADHAN == true ]] || exit 0
+
+TZ="${SALAT_TZ:-$(timedatectl show --property=Timezone --value 2>/dev/null || echo UTC)}"
+
+if [[ $SALAT_LANG == "ar" ]]; then
+  names=("الفجر" "الشروق" "الظهر" "العصر" "المغرب" "العشاء")
+  title="حان وقت الصلاة"
+else
+  names=("Fajr" "Sunrise" "Dhuhr" "Asr" "Maghrib" "Isha")
+  title="Prayer time"
+fi
+prayers=("Fajr" "Sunrise" "Dhuhr" "Asr" "Maghrib" "Isha")
+
+data=$(erch-salat-today --json 2>/dev/null) || exit 0
+if ! echo "$data" | jq -er '.data.timings' >/dev/null 2>&1; then
+  exit 0
+fi
+
+now=$(TZ=$TZ date +%H:%M)
+
+for i in "${!prayers[@]}"; do
+  pt=$(echo "$data" | jq -r ".data.timings.${prayers[$i]}" 2>/dev/null)
+  if [[ $pt == "$now" ]]; then
+    notify-send -u critical "${names[$i]}" "$title"
+    break
+  fi
+done

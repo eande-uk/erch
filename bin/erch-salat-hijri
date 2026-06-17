@@ -1,0 +1,34 @@
+#!/bin/bash
+# erch:summary=Print today's Hijri date
+
+CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/erch/salat.conf"
+
+SALAT_LANG="ar"
+
+if [[ -f $CONFIG ]]; then
+  source "$CONFIG"
+fi
+
+data=$(erch-salat-today --json 2>/dev/null) || { echo "Hijri unavailable"; exit 1; }
+
+if [[ $SALAT_LANG == "ar" ]]; then
+  day=$(echo "$data" | jq -r '.data.date.hijri.day' 2>/dev/null)
+  month=$(echo "$data" | jq -r '.data.date.hijri.month.ar' 2>/dev/null)
+  year=$(echo "$data" | jq -r '.data.date.hijri.year' 2>/dev/null)
+  if [[ -n $day && -n $month && -n $year ]]; then
+    echo "$day $month $year"
+  else
+    echo "Hijri unavailable"
+    exit 1
+  fi
+else
+  day=$(echo "$data" | jq -r '.data.date.hijri.day' 2>/dev/null)
+  month=$(echo "$data" | jq -r '.data.date.hijri.month.en' 2>/dev/null)
+  year=$(echo "$data" | jq -r '.data.date.hijri.year' 2>/dev/null)
+  if [[ -n $day && -n $month && -n $year ]]; then
+    echo "$day $month $year"
+  else
+    echo "Hijri unavailable"
+    exit 1
+  fi
+fi

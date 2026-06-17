@@ -1,0 +1,9 @@
+[Unit]
+Description=erch Salat Adhan Notification
+After=graphical-session.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/share/erch/bin/erch-salat-adhan
+Environment=DISPLAY=:0
+LogLevelMax=warning
