@@ -385,7 +385,7 @@ class=$(echo "$json" | jq -r '.class // empty')
 pass "waybar text is non-empty: $text"
 
 [[ -n $tooltip ]] || fail "waybar tooltip is empty"
-assert_output_contains "waybar tooltip has Hijri date" "$tooltip" "Dhul-Hijjah"
+assert_output_contains "waybar tooltip has Hijri date" "$tooltip" "1447"
 assert_output_contains "waybar tooltip has separator line" "$tooltip" "─────────────────"
 
 # tooltip must contain at least a couple of prayer lines
@@ -505,7 +505,7 @@ empty_conf=$(run_salat erch-salat-today 2>/dev/null) || rc=$?
 if [[ $empty_conf == "Salat unavailable" ]]; then
   pass "empty city/country in config: scripts use existing cache (no re-fetch)"
 else
-  assert_output_contains "empty config but cache works" "$empty_conf" "Dhul-Hijjah"
+  assert_output_contains "empty config but cache works" "$empty_conf" "1447"
 fi
 
 # ═══════════════════════════════════════════════════════════

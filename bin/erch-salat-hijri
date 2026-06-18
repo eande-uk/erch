@@ -18,6 +18,10 @@ if [[ $SALAT_LANG == "ar" ]]; then
 else
   day=$(echo "$data" | jq -r '.data.date.hijri.day // empty' 2>/dev/null)
   month=$(echo "$data" | jq -r '.data.date.hijri.month.en // empty' 2>/dev/null)
+  case "$month" in
+    "Dhul-Hijjah") month="Dhu al-Hijjah" ;;
+    "Dhul-Qi'dah") month="Dhu al-Qi'dah" ;;
+  esac
   year=$(echo "$data" | jq -r '.data.date.hijri.year // empty' 2>/dev/null)
 fi
 

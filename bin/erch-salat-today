@@ -62,7 +62,11 @@ if ! echo "$data" | jq -er '.data.timings' >/dev/null 2>&1; then
   exit 1
 fi
 
-hijri_date=$(echo "$data" | jq -r '[.data.date.hijri.day, .data.date.hijri.month.en, .data.date.hijri.year] | select(all(. != null)) | join(" ")' 2>/dev/null)
+if [[ $SALAT_LANG == "ar" ]]; then
+  hijri_date=$(echo "$data" | jq -r '[.data.date.hijri.day, .data.date.hijri.month.ar, .data.date.hijri.year] | select(all(. != null)) | join(" ")' 2>/dev/null)
+else
+  hijri_date=$(echo "$data" | jq -r '[.data.date.hijri.day, .data.date.hijri.month.en, .data.date.hijri.year] | select(all(. != null)) | join(" ")' 2>/dev/null)
+fi
 prayers=("Fajr" "Sunrise" "Dhuhr" "Asr" "Maghrib" "Isha")
 
 if [[ $SALAT_LANG == "ar" ]]; then
