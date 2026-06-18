@@ -4,12 +4,11 @@ erch is open source and welcomes contributions. See [CONTRIBUTING.md](https://gi
 
 ## Quick Summary
 
-1. **Branch from `master`** — name your branch `user:short-description`
+1. **Create a feature branch** — `erch branch create <name>` (creates `user:<name>` from master)
 2. **Make your changes** — follow the code style (two spaces, bash 5 conditionals, no tabs)
-3. **Add metadata** — every `erch-*` binary needs `# erch:summary=`
-4. **Update docs** — update READMEs, per-directory docs, and the manual if your change affects users
-5. **Add/run tests** — `bash test/erch-cli-test.sh` and `bash test/erch-wiki-test.sh`
-6. **Open a PR** — the template guides you through the checklist
+3. **Commit** — the pre-commit hook validates branch, syntax, metadata, migrations, and conflict markers
+4. **Push and open a PR** — `git push -u origin user:<name>` → open PR at GitHub
+5. **Merge via squash merge** — PR must pass CI and be reviewed
 
 ## Code Style
 

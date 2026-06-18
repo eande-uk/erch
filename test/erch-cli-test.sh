@@ -263,3 +263,26 @@ assert_output_contains "partial metadata command dispatches" "$output" "partial-
 
 output=$("$TMPDIR/erch" body metadata test)
 assert_output_contains "body metadata command dispatches by filename" "$output" "body-metadata-ok"
+
+# ── Branch create command ──────────────────────────────
+
+output=$("$CLI" branch create --help)
+assert_output_contains "branch create help shows usage" "$output" "erch branch create"
+pass "branch create help renders"
+
+"$CLI" commands --json | jq -e '.commands[] | select(.binary == "erch-branch-create")' >/dev/null
+pass "erch branch create is discovered in commands --json"
+
+"$CLI" commands --json | jq -e '.commands[] | select(.binary == "erch-branch-create" and .group == "branch")' >/dev/null
+pass "erch branch create has branch group in JSON"
+
+[[ -x $ROOT/bin/erch-branch-create ]] || fail "erch-branch-create is executable"
+pass "erch-branch-create binary is executable"
+
+# ── Pre-commit hook syntax ─────────────────────────────
+
+bash -n "$ROOT/config/git-hooks/pre-commit" || fail "pre-commit hook has valid bash syntax"
+pass "pre-commit hook has valid bash syntax"
+
+grep -q 'erch:summary=' "$ROOT/bin/erch-branch-create" || fail "branch-create has summary metadata"
+pass "branch-create has summary metadata"
