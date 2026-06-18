@@ -26,7 +26,6 @@ if ! echo "$data" | jq -er '.data.timings' >/dev/null 2>&1; then
 fi
 
 now_epoch=$(TZ=$TZ date +%s)
-now_time=$(TZ=$TZ date +%H:%M)
 
 # Convert prayer time (HH:MM) to today's epoch
 time_to_epoch() {

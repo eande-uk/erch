@@ -12,23 +12,18 @@ fi
 data=$(erch-salat-today --json 2>/dev/null) || { echo "Hijri unavailable"; exit 1; }
 
 if [[ $SALAT_LANG == "ar" ]]; then
-  day=$(echo "$data" | jq -r '.data.date.hijri.day' 2>/dev/null)
-  month=$(echo "$data" | jq -r '.data.date.hijri.month.ar' 2>/dev/null)
-  year=$(echo "$data" | jq -r '.data.date.hijri.year' 2>/dev/null)
-  if [[ -n $day && -n $month && -n $year ]]; then
-    echo "$day $month $year"
-  else
-    echo "Hijri unavailable"
-    exit 1
-  fi
+  day=$(echo "$data" | jq -r '.data.date.hijri.day // empty' 2>/dev/null)
+  month=$(echo "$data" | jq -r '.data.date.hijri.month.ar // empty' 2>/dev/null)
+  year=$(echo "$data" | jq -r '.data.date.hijri.year // empty' 2>/dev/null)
 else
-  day=$(echo "$data" | jq -r '.data.date.hijri.day' 2>/dev/null)
-  month=$(echo "$data" | jq -r '.data.date.hijri.month.en' 2>/dev/null)
-  year=$(echo "$data" | jq -r '.data.date.hijri.year' 2>/dev/null)
-  if [[ -n $day && -n $month && -n $year ]]; then
-    echo "$day $month $year"
-  else
-    echo "Hijri unavailable"
-    exit 1
-  fi
+  day=$(echo "$data" | jq -r '.data.date.hijri.day // empty' 2>/dev/null)
+  month=$(echo "$data" | jq -r '.data.date.hijri.month.en // empty' 2>/dev/null)
+  year=$(echo "$data" | jq -r '.data.date.hijri.year // empty' 2>/dev/null)
+fi
+
+if [[ -n $day && -n $month && -n $year ]]; then
+  echo "$day $month $year"
+else
+  echo "Hijri unavailable"
+  exit 1
 fi

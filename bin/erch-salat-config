@@ -2,7 +2,6 @@
 # erch:summary=Configure salat location and preferences
 # erch:group=salat
 # erch:name=config
-# erch:args=
 # erch:examples=erch salat config
 
 CONFIG_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/erch/salat.conf"
