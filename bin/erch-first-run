@@ -10,18 +10,5 @@ FIRST_RUN_MODE=~/.local/state/erch/first-run.mode
 if [[ -f $FIRST_RUN_MODE ]]; then
   rm -f "$FIRST_RUN_MODE"
 
-  bash "$ERCH_PATH/install/first-run/battery-monitor.sh"
-  bash "$ERCH_PATH/install/first-run/recover-internal-monitor.sh"
-  bash "$ERCH_PATH/install/first-run/cleanup-reboot-sudoers.sh"
-  bash "$ERCH_PATH/install/first-run/firewall.sh"
-  bash "$ERCH_PATH/install/first-run/dns-resolver.sh"
-  bash "$ERCH_PATH/install/first-run/gnome-theme.sh"
-  bash "$ERCH_PATH/install/first-run/swayosd.sh"
-  bash "$ERCH_PATH/install/first-run/gtk-primary-paste.sh"
-  bash "$ERCH_PATH/install/first-run/elephant.sh"
-  erch-hook-install post-update "$ERCH_PATH/install/first-run/install-voxtype.hook"
-  sudo rm -f /etc/sudoers.d/first-run
-
-  bash "$ERCH_PATH/install/first-run/welcome.sh"
-  bash "$ERCH_PATH/install/first-run/wifi.sh"
+  source "$ERCH_PATH/install/first-run/all.sh"
 fi

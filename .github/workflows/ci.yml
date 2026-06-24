@@ -1,0 +1,165 @@
+name: ci
+
+on:
+  pull_request:
+    branches: [master]
+  push:
+    branches: [master]
+
+jobs:
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ludeeus/action-shellcheck@master
+        with:
+          additional_files: >
+            bin/*.sh install/**/*.sh boot.sh
+          severity: style
+
+  metadata:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate command metadata
+        run: |
+          set -e
+          if [[ -f bin/erch ]]; then
+            . bin/erch
+            echo "GRP_DESCRIPTIONS loaded — $(echo ${!GROUP_DESCRIPTIONS[@]} | wc -w) groups"
+          fi
+          for f in bin/*.sh; do
+            [[ -f $f ]] || continue
+            summary=$(grep -m1 '# erch:summary=' "$f" 2>/dev/null || true)
+            if [[ -z $summary ]]; then
+              echo "⚠️ Missing summary: $f"
+            fi
+          done
+
+  migrations:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check migration format
+        run: |
+          set -e
+          for f in migrations/*.sh; do
+            perm=$(stat -c "%a" "$f")
+            if [[ ${#perm} -eq 3 ]]; then perm="0$perm"; fi
+            if [[ $perm != "0644" ]]; then
+              echo "❌ $f has perms $perm (expected 0644)"
+              exit 1
+            fi
+            if head -1 "$f" | grep -q '^#!'; then
+              echo "❌ $f has shebang (migrations are sourced)"
+              exit 1
+            fi
+          done
+          echo "✓ All migrations valid"
+
+  packages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate package files
+        run: |
+          set -e
+          # Check no duplicates within each profile file
+          for f in install/packages/*.pkgs install/erch-base.packages; do
+            [[ -f $f ]] || continue
+            dups=$(grep -v '^#' "$f" | grep -v '^$' | sort | uniq -d)
+            if [[ -n $dups ]]; then
+              echo "❌ Duplicates in $f:"
+              echo "$dups"
+              exit 1
+            fi
+          done
+          # Check common + work don't overlap
+          common=$(grep -v '^#' install/packages/common.pkgs | grep -v '^$' | sort)
+          work=$(grep -v '^#' install/packages/work.pkgs | grep -v '^$' | sort)
+          overlap=$(comm -12 <(echo "$common") <(echo "$work"))
+          if [[ -n $overlap ]]; then
+            echo "❌ Packages in both common and work:"
+            echo "$overlap"
+            exit 1
+          fi
+            echo "✓ Package files valid"
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate required docs exist
+        run: |
+          set -e
+          required=(
+            "docs/README.md"
+            "docs/ARCHITECTURE.md"
+            "docs/VISION.md"
+            "docs/ROADMAP.md"
+            "docs/FEATURES.md"
+            "docs/manual/book.toml"
+            "docs/manual/SUMMARY.md"
+            "docs/manual/src/welcome.md"
+          )
+          for f in "${required[@]}"; do
+            if [[ ! -f $f ]]; then
+              echo "❌ Missing required doc: $f"
+              exit 1
+            fi
+            echo "✓ $f"
+          done
+      - name: Validate every directory has README.md
+        run: |
+          set -e
+          skip_dirs=".git .github themes config/notes"
+          while IFS= read -r dir; do
+            base=$(basename "$dir")
+            skip=0
+            for s in $skip_dirs; do
+              if [[ $dir == *"$s"* ]]; then skip=1; break; fi
+            done
+            [[ $skip -eq 1 ]] && continue
+            # Skip dirs with no non-hidden files (empty leaf dirs)
+            nonhidden=$(find "$dir" -maxdepth 1 -not -name '.*' -not -type d | head -1)
+            [[ -z $nonhidden ]] && continue
+            if [[ ! -f $dir/README.md ]]; then
+              echo "❌ Missing README.md in $dir"
+              exit 1
+            fi
+            echo "✓ $dir/README.md"
+          done < <(find . -maxdepth 2 -type d -not -path './.git/*' -not -path './.github/*' | sort)
+      - name: Validate manual builds
+        run: |
+          set -e
+          if command -v mdbook >/dev/null 2>&1; then
+            mdbook build docs/manual/ --dest-dir /tmp/erch-manual-build
+            echo "✓ Manual builds successfully"
+          else
+            echo "⚠ mdbook not installed — skipping manual build test"
+          fi
+
+  wiki:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install test deps
+        run: sudo apt-get update && sudo apt-get install -y jq pandoc
+      - name: Run wiki tests
+        run: bash test/erch-wiki-test.sh
+
+  cli:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install test deps
+        run: sudo apt-get update && sudo apt-get install -y jq
+      - name: Run CLI tests
+        run: bash test/erch-cli-test.sh
+
+  salat:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run salat tests
+        run: bash test/erch-salat-test.sh

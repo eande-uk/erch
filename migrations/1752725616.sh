@@ -12,5 +12,5 @@ if [[ -f ~/.local/share/applications/blueberry.desktop ]]; then
 fi
 
 if [[ ! -L $HOME/.config/erch/themes/rose-pine ]]; then
-  ln -snf ~/.local/share/erch/themes/rose-pine ~/.config/erch/themes/
+  ln -snf $ERCH_PATH/themes/rose-pine ~/.config/erch/themes/
 fi

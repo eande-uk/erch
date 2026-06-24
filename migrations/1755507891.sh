@@ -1,5 +1,3 @@
-#!/bin/bash
-
 echo "Migrating to use erch-launch-webapp and erch-launch-browser"
 for desktop_file in ~/.local/share/applications/*.desktop; do
   if grep -q 'Exec=chromium --new-window --ozone-platform=wayland --app=' "$desktop_file"; then

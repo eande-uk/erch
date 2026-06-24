@@ -6,4 +6,4 @@ else
   mkdir -p ~/.config/imv
 fi
 
-cp ~/.local/share/erch/config/imv/config ~/.config/imv/config
+cp $ERCH_PATH/config/imv/config ~/.config/imv/config
