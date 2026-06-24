@@ -122,6 +122,7 @@ Run `erch --help` for the full list. The most common groups:
 | `erch pkg` | Package management | `erch pkg install <pkg>` |
 | `erch setup` | Initial setup tasks | `erch setup fingerprint` |
 | `erch update` | System updates | `erch update` |
+| `erch wiki` | Wiki and notes (mdbook, pandoc, serve) | `erch wiki init ./docs` |
 
 ## Configuration Locations
 
@@ -369,6 +370,53 @@ erch reminder 60 "Check laundry"
 erch reminder show
 erch reminder clear
 ```
+
+## Documentation
+
+Every E&E project follows a standard documentation pattern. When working with docs, follow these conventions.
+
+### Project Docs Structure
+
+```
+<project>/
+├── README.md              ← What, why, quick start, links to deeper docs
+├── docs/
+│   ├── README.md          ← Index of all documentation
+│   ├── ARCHITECTURE.md    ← System design with Mermaid diagrams
+│   ├── VISION.md          ← Product direction
+│   ├── ROADMAP.md         ← Phased plan with milestone status
+│   ├── FEATURES.md        ← Feature inventory by layer
+│   └── manual/            ← User-facing guide (mdbook)
+└── <component>/
+    └── README.md          ← What lives here, why, how to use, cross-refs
+```
+
+### User Manual
+
+The `docs/manual/` directory is an mdbook project. Chapters follow this structure:
+
+| Section | Content |
+|---------|---------|
+| Welcome | What is this project, who is it for |
+| Getting Started | Installation, first steps |
+| Navigation | Keybindings, workflow |
+| Themes | Visual customization |
+| Hotkeys | Keyboard shortcut reference |
+| CLI | Command reference |
+| Applications | Included software |
+| Configuration | File locations, customization |
+| [Feature] | Project-specific chapter |
+| Troubleshooting | Common issues |
+
+### Per-Directory READMEs
+
+Every directory has a README.md that briefly explains:
+
+- **What** lives here
+- **Why** it exists
+- **How** to use it (with cross-references to `docs/`)
+
+See `~/.config/agent/config/workflows/project-documentation.md` for the full standard.
 
 ## Out of Scope
 

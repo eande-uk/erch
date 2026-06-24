@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# erch:summary=Upload logs to logs.omarchy.org
+# erch:summary=Collect logs for local debugging
 # erch:args=<log-file>
 # erch:hidden=true
 
@@ -67,7 +67,7 @@ install)
     exit 1
   fi
 
-  echo "Uploading installation log to logs.omarchy.org..."
+  echo "Collecting installation logs..."
   ;;
 
 this-boot)
@@ -80,7 +80,7 @@ this-boot)
     exit 1
   fi
 
-  echo "Uploading current boot logs to logs.omarchy.org..."
+  echo "Collecting current boot logs..."
   ;;
 
 last-boot)
@@ -93,7 +93,7 @@ last-boot)
     exit 1
   fi
 
-  echo "Uploading previous boot logs to logs.omarchy.org..."
+  echo "Collecting previous boot logs..."
   ;;
 
 installed|system-info)
@@ -112,29 +112,25 @@ installed|system-info)
     exit 1
   fi
 
-  echo "Uploading system information to logs.omarchy.org..."
+  echo "Collecting system information..."
   ;;
 
 *)
   echo "Usage: $0 [install|this-boot|last-boot|installed|system-info]"
-  echo "  install      - Upload installation logs (default)"
-  echo "  this-boot    - Upload logs from current boot"
-  echo "  last-boot    - Upload logs from previous boot"
-  echo "  installed    - Upload system info and installed packages"
+  echo "  install      - Collect installation logs (default)"
+  echo "  this-boot    - Collect logs from current boot"
+  echo "  last-boot    - Collect logs from previous boot"
+  echo "  installed    - Collect system info and installed packages"
   exit 1
   ;;
 esac
 
 echo ""
 
-URL=$(curl -sf -F "file=@$TEMP_LOG" https://logs.omarchy.org/)
-
-if (( $? == 0 )) && [[ -n $URL ]]; then
-  echo "✓ Log uploaded successfully!"
-  echo "Share this URL:"
-  echo ""
-  echo "  $URL"
+if [[ -s $TEMP_LOG ]]; then
+  echo "✓ Log collected at $TEMP_LOG"
+  echo "  File size: $(wc -c < "$TEMP_LOG") bytes"
 else
-  echo "Error: Failed to upload log file"
+  echo "Error: Failed to collect log file"
   exit 1
 fi

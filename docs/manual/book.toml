@@ -1,0 +1,14 @@
+[book]
+authors = ["E&E Entreprises"]
+language = "en"
+multilingual = false
+src = "src"
+title = "erch Manual"
+
+[build]
+build-dir = "book"
+
+[output.html]
+site-url = "https://erch.eande.uk/manual"
+
+[output.html.theme]

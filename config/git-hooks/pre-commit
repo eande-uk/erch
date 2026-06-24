@@ -1,0 +1,101 @@
+#!/bin/bash
+# erch pre-commit hook — enforced on every git commit
+# Installed by migration; skip with git commit --no-verify
+# or set ERCH_ALLOW_DIRECT_MASTER=1 to bypass master block
+
+set -euo pipefail
+
+ERCH_ALLOW_DIRECT_MASTER="${ERCH_ALLOW_DIRECT_MASTER:-0}"
+
+# ── Helpers ──────────────────────────────────────────
+
+red()  { printf '\033[31m%s\033[0m\n' "$*" >&2; }
+green() { printf '\033[32m%s\033[0m\n' "$*" >&2; }
+yellow() { printf '\033[33m%s\033[0m\n' "$*" >&2; }
+
+pass() { green "  ✓ $1"; }
+fail() { red "  ✗ $1"; failures=$((failures + 1)); }
+
+failures=0
+
+# ── Check 1: Block direct master commits ─────────────
+
+branch=$(git symbolic-ref --short HEAD 2>/dev/null || true)
+
+if [[ $branch == "master" && $ERCH_ALLOW_DIRECT_MASTER -eq 0 ]]; then
+  cat >&2 <<'EOF'
+
+  ✗ Direct commits to master are not allowed.
+    All changes must go through a pull request.
+
+    To create a feature branch:
+      erch branch create <name>
+      # or: git checkout -b user:<name>
+
+    To bypass this check (emergency only):
+      git commit --no-verify
+      # or: ERCH_ALLOW_DIRECT_MASTER=1 git commit
+
+EOF
+  exit 1
+fi
+
+if [[ $branch == "master" ]]; then
+  yellow "  ⚠ Committing to master with ERCH_ALLOW_DIRECT_MASTER set"
+fi
+
+pass "Branch check ($branch)"
+
+# ── Check 2: Bash syntax on staged .sh files ─────────
+
+while IFS= read -r file; do
+  if ! bash -n "$file" 2>/dev/null; then
+    fail "bash syntax: $file"
+  else
+    pass "bash syntax: $file"
+  fi
+done < <(git diff --cached --name-only --diff-filter=ACMR | grep '\.sh$' || true)
+
+# ── Check 3: New binaries must have summary metadata ──
+
+while IFS= read -r file; do
+  grep -q '^# erch:summary=' "$file" && pass "metadata: $file" || fail "metadata (missing # erch:summary=): $file"
+done < <(git diff --cached --name-only --diff-filter=A | grep '^bin/erch-' || true)
+
+# ── Check 4: Migration files — no shebang, 0644 perms ─
+
+while IFS= read -r file; do
+  if head -1 "$file" | grep -q '^#!'; then
+    fail "migration has shebang: $file"
+  else
+    pass "migration no shebang: $file"
+  fi
+  perm=$(stat -c "%a" "$file" 2>/dev/null || stat -f "%A" "$file" 2>/dev/null || echo "")
+  if [[ -n $perm ]]; then
+    if [[ ${#perm} -eq 3 ]]; then perm="0$perm"; fi
+    if [[ $perm != "0644" ]]; then
+      fail "migration perms (got $perm, want 0644): $file"
+    else
+      pass "migration perms: $file"
+    fi
+  fi
+done < <(git diff --cached --name-only --diff-filter=ACMR | grep '^migrations/[0-9]*\.sh$' || true)
+
+# ── Check 5: Merge conflict markers ───────────────────
+
+while IFS= read -r file; do
+  if grep -qE '^(<<<<<<<|=======|>>>>>>>)' "$file"; then
+    fail "merge conflict markers: $file"
+  else
+    pass "no conflict markers: $file"
+  fi
+done < <(git diff --cached --name-only --diff-filter=ACMR | grep -v '^\.git/' || true)
+
+# ── Result ─────────────────────────────────────────────
+
+if (( failures > 0 )); then
+  red "  ✗ $failures check(s) failed. Commit blocked."
+  exit 1
+fi
+
+green "  ✓ All checks passed"

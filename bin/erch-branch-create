@@ -1,0 +1,42 @@
+#!/bin/bash
+# erch:summary=Create a feature branch from master with user: prefix
+# erch:group=branch
+# erch:args=<name>
+# erch:examples=erch branch create fix-waybar-icon
+
+
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+erch branch create — Create a feature branch from master
+
+Usage:
+  erch branch create <name>
+
+Creates and checks out user:<name> from the current master.
+Follows the erch branch naming convention for PRs.
+EOF
+  exit 0
+}
+
+[[ "${1:-}" == "--help" || "${1:-}" == "-h" ]] && usage
+name="${1:-}"
+
+if [[ -z $name ]]; then
+  echo "Usage: erch branch create <name>" >&2
+  exit 1
+fi
+
+branch="user:$name"
+
+if git show-ref --verify --quiet "refs/heads/$branch"; then
+  echo "Branch '$branch' already exists. Checking out…"
+  git checkout "$branch"
+  exit 0
+fi
+
+echo "Creating branch '$branch' from master…"
+git fetch origin master 2>/dev/null || true
+git checkout -b "$branch" origin/master 2>/dev/null || git checkout -b "$branch" master
+echo "Switched to branch '$branch'"

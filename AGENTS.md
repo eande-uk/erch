@@ -31,7 +31,7 @@ Common prefixes include:
 
 Other current prefixes include:
 
-- `ac-`, `audio-`, `battery-`, `branch-`, `brightness-`, `channel-`, `config-`, `debug-`, `dev-`, `drive-`, `first-`, `font-`, `haptic-`, `hibernation-`, `hook-`, `hyprland-`, `menu-`, `migrate-`, `notification-`, `npx-`, `plymouth-`, `powerprofiles-`, `reinstall-`, `remove-`, `screensaver-`, `show-`, `snapshot-`, `state-`, `sudo-`, `swayosd-`, `system-`, `transcode-`, `tui-`, `tz-`, `upload-`, `version-`, `voxtype-`, `webapp-`, `wifi-`, `windows-`
+- `ac-`, `audio-`, `battery-`, `branch-`, `brightness-`, `channel-`, `config-`, `debug-`, `dev-`, `drive-`, `first-`, `font-`, `haptic-`, `hibernation-`, `hook-`, `hyprland-`, `menu-`, `migrate-`, `notification-`, `npx-`, `plymouth-`, `powerprofiles-`, `reinstall-`, `remove-`, `screensaver-`, `show-`, `snapshot-`, `state-`, `sudo-`, `swayosd-`, `system-`, `transcode-`, `tui-`, `tz-`, `upload-`, `version-`, `voxtype-`, `webapp-`, `wifi-`, `wiki-`, `windows-`
 
 # Command Metadata
 
@@ -109,6 +109,33 @@ erch-refresh-config hypr/hyprlock.conf
 ```
 
 This copies `~/.local/share/erch/config/hypr/hyprlock.conf` to `~/.config/hypr/hyprlock.conf`.
+
+# Documentation
+
+Every directory must have a `README.md` explaining its purpose. The `docs/` directory contains all developer and user documentation.
+
+## Required Reference Documents
+
+These files define the product direction and architecture. Read them before planning significant changes:
+
+| Document | Path | Purpose |
+|----------|------|---------|
+| Architecture | `docs/ARCHITECTURE.md` | Layer model, install flow, component ownership, key decisions |
+| Product Vision | `docs/VISION.md` | What erch is, guiding principles, long-term direction |
+| Roadmap | `docs/ROADMAP.md` | Phased plan with completed and upcoming milestones |
+| Feature Inventory | `docs/FEATURES.md` | Complete feature list by layer with status |
+| User Manual | `docs/manual/` | User-facing guide (mdbook, hosted on erch.eande.uk/manual) |
+
+## Per-Directory READMEs
+
+When creating a new directory, add a README.md that covers:
+
+- **What** lives here
+- **Why** it exists (the problem it solves)
+- **How** to use it (brief — cross-ref to deeper docs)
+- **Cross-references** to relevant sections in `docs/`
+
+Follow the pattern in `~/.config/agent/config/workflows/project-documentation.md`.
 
 # Migrations
 

@@ -1,8 +1,7 @@
-# erch core package list installed via install/packaging/base.sh
-# This file is also used by the ISO builder when determining needs
+# erch core package list — union of common + all profiles
+# Used by the ISO builder to ensure package availability.
+# The install pipeline selects by profile (see install/packages/).
 
-1password-beta
-1password-cli
 aether
 alsa-utils
 asdcontrol
@@ -144,12 +143,18 @@ wireless-regdb
 wiremix
 wireplumber
 wl-clipboard
-woff2-font-awesome
-xdg-desktop-portal-gtk
-xdg-desktop-portal-hyprland
-xdg-terminal-exec
-xmlstarlet
+xdg-desktop-portal-gtk xdg-desktop-portal-hyprland xdg-terminal-exec
+fontconfig libsecret libyaml libqalculate postgresql-libs python-gobject python-terminaltexteffects python-poetry-core
+fcitx5 fcitx5-gtk fcitx5-qt qt5-wayland kvantum-qt5
+polkit-gnome playerctl sushi
+
+# ── All profiles (work + school + game) ────────────────────
+libreoffice-fresh
+thunderbird
+taskwarrior
 xournalpp
-yaru-icon-theme
-yay
-zoxide
+tobi-try
+git github-cli lazygit lazydocker
+docker docker-compose docker-buildx
+rust clang llvm ruby go
+steam lutris mangohud gamemode

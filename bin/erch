@@ -84,6 +84,7 @@ GROUP_DESCRIPTIONS[voxtype]="Voxtype dictation"
 GROUP_DESCRIPTIONS[salat]="Prayer times and Hijri calendar"
 GROUP_DESCRIPTIONS[weather]="Weather status"
 GROUP_DESCRIPTIONS[webapp]="Web app launchers"
+GROUP_DESCRIPTIONS[wiki]="Wiki and notes management"
 GROUP_DESCRIPTIONS[wifi]="Wi-Fi helpers"
 GROUP_DESCRIPTIONS[windows]="Windows VM management"
 

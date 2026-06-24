@@ -6,15 +6,6 @@ CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/erch"
 CACHE_FILE="$CACHE_DIR/salat.json"
 CACHE_TTL=21600
 API_BASE="https://api.aladhan.com/v1/timingsByCity"
-METHOD_NAMES=(
-  "Karachi (University of Islamic Sciences)"
-  "ISNA (Islamic Society of North America)"
-  "MWL (Muslim World League)"
-  "Makkah (Umm Al-Qura)"
-  "Egypt (Egyptian General Authority)"
-  "Tehran (Institute of Geophysics, University of Tehran)"
-  "Jafari (Shia Ithna Ashari)"
-)
 
 SALAT_TZ=""
 SALAT_CITY=""
@@ -61,7 +52,21 @@ fi
 
 data=$(cat "$CACHE_FILE")
 
-hijri_date=$(echo "$data" | jq -r '.data.date.hijri.day + " " + .data.date.hijri.month.en + " " + .data.date.hijri.year' 2>/dev/null)
+if ! echo "$data" | jq -er '.data.timings' >/dev/null 2>&1; then
+  rm -f "$CACHE_FILE"
+  if [[ $1 == "--json" ]]; then
+    echo '{}'
+  else
+    echo "Salat unavailable"
+  fi
+  exit 1
+fi
+
+if [[ $SALAT_LANG == "ar" ]]; then
+  hijri_date=$(echo "$data" | jq -r '[.data.date.hijri.day, .data.date.hijri.month.ar, .data.date.hijri.year] | select(all(. != null)) | join(" ")' 2>/dev/null)
+else
+  hijri_date=$(echo "$data" | jq -r '[.data.date.hijri.day, .data.date.hijri.month.en, .data.date.hijri.year] | select(all(. != null)) | join(" ")' 2>/dev/null)
+fi
 prayers=("Fajr" "Sunrise" "Dhuhr" "Asr" "Maghrib" "Isha")
 
 if [[ $SALAT_LANG == "ar" ]]; then

@@ -1,0 +1,146 @@
+# ── Core system ──────────────────────────────────────────
+hyprland
+hypridle
+hyprlock
+hyprpicker
+hyprsunset
+hyprland-guiutils
+hyprland-preview-share-picker
+uwsm
+swaybg
+swayosd
+mako
+waybar
+erch-walker
+sddm
+plymouth
+
+# ── Terminal & shell ─────────────────────────────────────
+alacritty
+starship
+zoxide
+fzf
+bat
+eza
+ripgrep
+tmux
+less
+fastfetch
+tldr
+
+# ── Editor ───────────────────────────────────────────────
+nvim
+erch-nvim
+
+# ── Browser ──────────────────────────────────────────────
+chromium
+
+# ── File management ──────────────────────────────────────
+nautilus
+nautilus-python
+gnome-disk-utility
+gvfs-mtp
+gvfs-nfs
+gvfs-smb
+
+# ── Images & screenshots ────────────────────────────────
+imv
+grim
+slurp
+satty
+imagemagick
+
+# ── Video ────────────────────────────────────────────────
+mpv
+obs-studio
+kdenlive
+ffmpegthumbnailer
+
+# ── Audio ────────────────────────────────────────────────
+pipewire
+pipewire-alsa
+pipewire-jack
+pipewire-pulse
+wireplumber
+pamixer
+cliamp
+alsa-utils
+
+# ── Fonts ────────────────────────────────────────────────
+noto-fonts
+noto-fonts-cjk
+noto-fonts-emoji
+ttf-amiri
+ttf-ia-writer
+ttf-jetbrains-mono-nerd
+woff2-font-awesome
+
+# ── Password ─────────────────────────────────────────────
+gopass
+
+# ── System utilities ─────────────────────────────────────
+ufw
+plocate
+tzupdate
+power-profiles-daemon
+socat
+dosfstools
+exfatprogs
+bolt
+avahi
+nss-mdns
+inetutils
+iwd
+wireless-regdb
+fd
+jq
+gum
+inxi
+man-db
+unzip
+whois
+xmlstarlet
+expac
+
+# ── Printing ─────────────────────────────────────────────
+cups
+cups-browsed
+cups-filters
+cups-pdf
+system-config-printer
+
+# ── Clipboard ────────────────────────────────────────────
+wl-clipboard
+
+# ── Portal & XDG ─────────────────────────────────────────
+xdg-desktop-portal-gtk
+xdg-desktop-portal-hyprland
+xdg-terminal-exec
+
+# ── Libraries ────────────────────────────────────────────
+fontconfig
+libsecret
+libyaml
+libqalculate
+postgresql-libs
+python-gobject
+python-terminaltexteffects
+python-poetry-core
+
+# ── Input ────────────────────────────────────────────────
+fcitx5
+fcitx5-gtk
+fcitx5-qt
+
+# ── Display ──────────────────────────────────────────────
+qt5-wayland
+kvantum-qt5
+
+# ── Misc ─────────────────────────────────────────────────
+polkit-gnome
+playerctl
+sushi
+playerctl
+
+# ── Hardware detection helpers ───────────────────────────
+# (installed via separate hardware scripts)

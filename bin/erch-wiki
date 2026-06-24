@@ -1,0 +1,437 @@
+#!/bin/bash
+# erch:summary=Wiki and notes — mdbook, pandoc, serve, init
+# erch:group=wiki
+# erch:examples=erch wiki init ./docs | erch wiki serve | erch wiki html doc.md -o out.html | erch wiki pdf doc.md -o out.pdf | erch wiki notes init | erch wiki notes serve
+# erch:args=init|serve|html|pdf|build|notes [options]
+
+set -euo pipefail
+
+ERCH_HOME="${XDG_CONFIG_HOME:-$HOME/.config}/erch"
+THEME_CSS="$ERCH_HOME/current/theme/erch.css"
+FALLBACK_CSS="${XDG_CONFIG_HOME:-$HOME/.config}/erch/notes/erch.css"
+NOTES_DIR="$HOME/wiki"
+NOTES_SRC="$NOTES_DIR"
+NOTES_BOOK="$NOTES_DIR/book"
+
+usage() {
+  cat <<'EOF'
+erch wiki — Wiki and notes management
+
+Usage:
+  erch wiki init [dir]                     Bootstrap wiki skeleton with mdbook
+  erch wiki serve [path]                   Render and open in browser
+  erch wiki html <file> [-o <out>]         Convert md → standalone HTML
+  erch wiki pdf  <file> [-o <out>]         Convert md → standalone PDF
+  erch wiki build [dir]                    Build mdbook site
+
+  erch wiki notes                          Personal notes (sub-commands)
+  erch wiki notes init                     Bootstrap ~/wiki/ with vimwiki + mdbook
+  erch wiki notes serve                    mdbook serve ~/wiki/
+  erch wiki notes build                    mdbook build ~/wiki/ → ~/wiki/book/
+
+Examples:
+  erch wiki init ./docs
+  erch wiki serve ./wiki
+  erch wiki serve README.md
+  erch wiki html doc.md -o out.html
+  erch wiki pdf doc.md -o out.pdf
+  erch wiki build
+  erch wiki notes init
+  erch wiki notes serve
+EOF
+  exit 0
+}
+
+notes_usage() {
+  cat <<'EOF'
+erch wiki notes — Personal notes management
+
+Usage:
+  erch wiki notes init                     Bootstrap ~/wiki/ with vimwiki + mdbook
+  erch wiki notes serve                    mdbook serve ~/wiki/
+  erch wiki notes build                    mdbook build ~/wiki/ → ~/wiki/book/
+EOF
+  exit 0
+}
+
+resolve_css() {
+  if [[ -f $THEME_CSS ]]; then
+    echo "$THEME_CSS"
+  elif [[ -f $FALLBACK_CSS ]]; then
+    echo "$FALLBACK_CSS"
+  else
+    echo ""
+  fi
+}
+
+ensure_pandoc() {
+  if ! command -v pandoc >/dev/null 2>&1; then
+    echo "pandoc not found. Install it: erch pkg add pandoc" >&2
+    exit 1
+  fi
+}
+
+ensure_mdbook() {
+  if ! command -v mdbook >/dev/null 2>&1; then
+    echo "mdbook not found. Install it: erch pkg add mdbook" >&2
+    exit 1
+  fi
+}
+
+# ── init ───────────────────────────────────────────────────
+
+cmd_init() {
+  local dir="${1:-./wiki}"
+  mkdir -p "$dir/src/docs" "$dir/src/assets"
+  if [[ ! -f $dir/book.toml ]]; then
+    cat >"$dir/book.toml" <<'TOML'
+[book]
+authors = []
+language = "en"
+multilingual = false
+src = "src"
+title = "Wiki"
+
+[build]
+build-dir = "book"
+
+[output.html]
+site-url = ""
+edit-url-template = ""
+TOML
+  fi
+  if [[ ! -f $dir/src/SUMMARY.md ]]; then
+    cat >"$dir/src/SUMMARY.md" <<'MD'
+# Summary
+
+[Introduction](index.md)
+[Notes](notes/index.md)
+MD
+  fi
+  if [[ ! -f $dir/src/index.md ]]; then
+    cat >"$dir/src/index.md" <<'MD'
+# Welcome
+
+This wiki was initialized with `erch wiki init`.
+
+Start writing in `src/docs/` or `src/notes/`.
+MD
+  fi
+  echo "Wiki skeleton created at $dir"
+}
+
+# ── html ───────────────────────────────────────────────────
+
+cmd_html() {
+  ensure_pandoc
+  local input="$1"
+  local output="$2"
+  local css
+  css=$(resolve_css)
+  local pandoc_opts=("--standalone" "--embed-resources")
+  if [[ -n $css ]]; then
+    pandoc_opts+=(--css "$css")
+  fi
+  pandoc "$input" "${pandoc_opts[@]}" -o "$output"
+  echo "Wrote $output"
+}
+
+# ── pdf ────────────────────────────────────────────────────
+
+cmd_pdf() {
+  ensure_pandoc
+  local input="$1"
+  local output="$2"
+  local css
+  css=$(resolve_css)
+  local pandoc_opts=()
+  if [[ -n $css ]]; then
+    pandoc_opts+=(--css "$css")
+  fi
+  if command -v weasyprint >/dev/null 2>&1; then
+    pandoc "$input" "${pandoc_opts[@]}" --pdf-engine=weasyprint -o "$output"
+  else
+    echo "weasyprint not found. Install it via: mise exec python -- uv pip install weasyprint" >&2
+    exit 1
+  fi
+  echo "Wrote $output"
+}
+
+# ── serve ──────────────────────────────────────────────────
+
+cmd_serve() {
+  local path="${1:-}"
+  if [[ -z $path ]]; then
+    path=$(detect_wiki_root)
+  fi
+  if [[ -z $path ]]; then
+    path="$NOTES_SRC"
+  fi
+  if [[ -f $path ]]; then
+    serve_file "$path"
+  elif [[ -d $path ]]; then
+    if [[ -f $path/book.toml ]]; then
+      ensure_mdbook
+      mdbook serve "$path" --open
+    else
+      serve_dir "$path"
+    fi
+  else
+    echo "Path not found: $path" >&2
+    exit 1
+  fi
+}
+
+detect_wiki_root() {
+  local dirs=("$PWD/wiki" "$PWD/docs" "$PWD")
+  for d in "${dirs[@]}"; do
+    if [[ -d $d ]]; then
+      for f in "index.md" "README.md"; do
+        if [[ -f $d/$f ]]; then
+          echo "$d/$f"
+          return 0
+        fi
+      done
+    fi
+  done
+  if [[ -d $NOTES_SRC && -f $NOTES_SRC/SUMMARY.md ]]; then
+    echo "$NOTES_SRC"
+    return 0
+  fi
+  echo ""
+}
+
+serve_file() {
+  ensure_pandoc
+  local input="$1"
+  local css
+  css=$(resolve_css)
+  local tmp
+  tmp=$(mktemp /tmp/erch-wiki-XXXXXX.html)
+  local pandoc_opts=("--standalone" "--embed-resources")
+  if [[ -n $css ]]; then
+    pandoc_opts+=(--css "$css")
+  fi
+  pandoc "$input" "${pandoc_opts[@]}" -o "$tmp"
+  xdg-open "$tmp" >/dev/null 2>&1 &
+}
+
+serve_dir() {
+  ensure_pandoc
+  local dir="$1"
+  local css
+  css=$(resolve_css)
+  local tmp
+  tmp=$(mktemp /tmp/erch-wiki-XXXXXX.html)
+  local entry=""
+  for f in "index.md" "README.md"; do
+    if [[ -f $dir/$f ]]; then
+      entry="$dir/$f"
+      break
+    fi
+  done
+  if [[ -z $entry ]]; then
+    entry=$(find "$dir" -maxdepth 1 -name '*.md' | sort | head -1)
+  fi
+  if [[ -z $entry ]]; then
+    echo "No markdown files found in $dir" >&2
+    exit 1
+  fi
+  local pandoc_opts=("--standalone" "--embed-resources")
+  if [[ -n $css ]]; then
+    pandoc_opts+=(--css "$css")
+  fi
+  pandoc "$entry" "${pandoc_opts[@]}" -o "$tmp"
+  xdg-open "$tmp" >/dev/null 2>&1 &
+}
+
+# ── build ──────────────────────────────────────────────────
+
+cmd_build() {
+  local dir="${1:-.}"
+  if [[ ! -f $dir/book.toml ]]; then
+    echo "No book.toml found in $dir" >&2
+    exit 1
+  fi
+  ensure_mdbook
+  mdbook build "$dir"
+  echo "Built $dir/book/"
+}
+
+# ── notes ──────────────────────────────────────────────────
+
+cmd_notes() {
+  local sub="${1:-}"
+  shift 2>/dev/null || true
+  case "$sub" in
+    init)
+      cmd_notes_init "$@"
+      ;;
+    serve)
+      cmd_notes_serve "$@"
+      ;;
+    build)
+      cmd_notes_build "$@"
+      ;;
+    --help|-h|"")
+      notes_usage
+      ;;
+    *)
+      echo "Unknown notes subcommand: $sub" >&2
+      notes_usage >&2
+      exit 1
+      ;;
+  esac
+}
+
+cmd_notes_init() {
+  mkdir -p "$NOTES_DIR/notes" "$NOTES_DIR/assets"
+  local notes_book="$NOTES_DIR/book.toml"
+  if [[ ! -f $notes_book ]]; then
+    ERCH_CONFIG="${ERCH_PATH:-$HOME/.local/share/erch}/config/notes/book.toml"
+    if [[ ! -f $ERCH_CONFIG ]]; then
+      ERCH_CONFIG="${BASH_SOURCE[0]%/*}/../config/notes/book.toml"
+    fi
+    if [[ -f $ERCH_CONFIG ]]; then
+      cp "$ERCH_CONFIG" "$notes_book"
+    fi
+  fi
+  local notes_summary="$NOTES_DIR/SUMMARY.md"
+  if [[ ! -f $notes_summary ]]; then
+    ERCH_SUMMARY="${ERCH_PATH:-$HOME/.local/share/erch}/config/notes/SUMMARY.md"
+    if [[ ! -f $ERCH_SUMMARY ]]; then
+      ERCH_SUMMARY="${BASH_SOURCE[0]%/*}/../config/notes/SUMMARY.md"
+    fi
+    if [[ -f $ERCH_SUMMARY ]]; then
+      cp "$ERCH_SUMMARY" "$notes_summary"
+    fi
+  fi
+  local notes_index="$NOTES_DIR/index.md"
+  if [[ ! -f $notes_index ]]; then
+    cat >"$notes_index" <<'MD'
+# Notes
+
+Personal wiki managed with `erch wiki notes`.
+
+- [Notes](notes/index.md)
+MD
+  fi
+  local notes_notes_index="$NOTES_DIR/notes/index.md"
+  if [[ ! -f $notes_notes_index ]]; then
+    cat >"$notes_notes_index" <<'MD'
+# Notes Index
+
+Start writing notes here.
+MD
+  fi
+  mkdir -p "$NOTES_DIR/theme/css"
+  local mdbook_vars_css="$ERCH_HOME/current/theme/mdbook-variables.css"
+  local symlink_target="$NOTES_DIR/theme/css/variables.css"
+  if [[ -f $mdbook_vars_css ]] && [[ ! -e $symlink_target ]]; then
+    ln -sf "$mdbook_vars_css" "$symlink_target"
+    echo "  Symlinked mdbook theme → erch theme"
+  fi
+  local nvim_config="${XDG_CONFIG_HOME:-$HOME/.config}/nvim"
+  local vimwiki_nvim="$nvim_config/after/plugin/vimwiki.lua"
+  if [[ ! -f $vimwiki_nvim ]]; then
+    mkdir -p "$(dirname "$vimwiki_nvim")"
+    ERCH_VIMWIKI="${ERCH_PATH:-$HOME/.local/share/erch}/config/notes/vimwiki.lua"
+    if [[ ! -f $ERCH_VIMWIKI ]]; then
+      ERCH_VIMWIKI="${BASH_SOURCE[0]%/*}/../config/notes/vimwiki.lua"
+    fi
+    if [[ -f $ERCH_VIMWIKI ]]; then
+      cp "$ERCH_VIMWIKI" "$vimwiki_nvim"
+      echo "  Installed vimwiki config → $vimwiki_nvim"
+    fi
+  fi
+  echo "Notes directory initialized at $NOTES_DIR"
+}
+
+cmd_notes_serve() {
+  ensure_mdbook
+  mdbook serve "$NOTES_SRC" --open
+}
+
+cmd_notes_build() {
+  ensure_mdbook
+  mdbook build "$NOTES_SRC"
+  echo "Built $NOTES_BOOK/"
+}
+
+# ── dispatch ──────────────────────────────────────────────
+
+main() {
+  if [[ $# -eq 0 ]]; then
+    usage
+  fi
+  case "${1:-}" in
+    --help|-h)
+      usage
+      ;;
+    init)
+      shift
+      cmd_init "$@"
+      ;;
+    serve)
+      shift
+      cmd_serve "$@"
+      ;;
+    html)
+      shift
+      if [[ $# -lt 1 ]]; then
+        echo "Usage: erch wiki html <file> [-o <out>]" >&2
+        exit 1
+      fi
+      local input="$1"
+      shift
+      local output=""
+      while [[ $# -gt 0 ]]; do
+        case "$1" in
+          -o) shift; output="$1" ;;
+          *) echo "Unknown option: $1" >&2; exit 1 ;;
+        esac
+        shift
+      done
+      if [[ -z $output ]]; then
+        output="${input%.*}.html"
+      fi
+      cmd_html "$input" "$output"
+      ;;
+    pdf)
+      shift
+      if [[ $# -lt 1 ]]; then
+        echo "Usage: erch wiki pdf <file> [-o <out>]" >&2
+        exit 1
+      fi
+      local input="$1"
+      shift
+      local output=""
+      while [[ $# -gt 0 ]]; do
+        case "$1" in
+          -o) shift; output="$1" ;;
+          *) echo "Unknown option: $1" >&2; exit 1 ;;
+        esac
+        shift
+      done
+      if [[ -z $output ]]; then
+        output="${input%.*}.pdf"
+      fi
+      cmd_pdf "$input" "$output"
+      ;;
+    build)
+      shift
+      cmd_build "$@"
+      ;;
+    notes)
+      shift
+      cmd_notes "$@"
+      ;;
+    *)
+      echo "Unknown subcommand: ${1:-}" >&2
+      usage >&2
+      exit 1
+      ;;
+  esac
+}
+
+main "$@"

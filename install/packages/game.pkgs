@@ -1,0 +1,12 @@
+# ── Game stores ───────────────────────────────────────────
+steam
+
+# ── Game managers ────────────────────────────────────────
+lutris
+
+# ── Emulation ────────────────────────────────────────────
+# retroarch (uncomment when needed)
+
+# ── Performance ──────────────────────────────────────────
+mangohud
+gamemode
