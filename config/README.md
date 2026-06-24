@@ -4,24 +4,43 @@ Default configuration files for every application erch ships. On install, these 
 
 ## Contents
 
-| Directory | App | Refresh |
-|-----------|-----|---------|
-| `hypr/` | Hyprland (WM, bindings, monitors, input, idle, lock) | `erch refresh hypr/<file>` |
-| `waybar/` | Status bar | `erch refresh waybar` |
-| `alacritty/` | Terminal | Theme-aware via `.tpl` |
-| `kitty/` | Terminal | Theme-aware via `.tpl` |
-| `foot/` | Terminal | Theme-aware via `.tpl` |
-| `ghostty/` | Terminal | Theme-aware via `.tpl` |
-| `walker/` | App launcher | Theme-aware via `.tpl` |
-| `mako/` | Notifications | Theme-aware via `.tpl` |
-| `swayosd/` | On-screen display | Theme-aware via `.tpl` |
-| `nvim/` | Neovim editor | — |
-| `tmux/` | Terminal multiplexer | — |
+| Directory / File | App | Refresh |
+|------------------|-----|---------|
+| `alacritty/` | Terminal (Alacritty) | Theme-aware via `.tpl` |
+| `autostart/` | Autostart desktop entries | — |
+| `btop/` | System monitor (btop) | Theme-aware via `.tpl` |
+| `chromium/` | Browser policies | `erch refresh chromium` |
+| `chromium-flags.conf` | Chromium flags | — |
+| `elephant/` | Elephant wallpaper manager | — |
+| `environment.d/` | Systemd environment (input method) | — |
+| `erch/` | erch user config (extensions, hooks, themes) | — |
+| `erch.ttf` | erch icon font | — |
+| `fastfetch/` | System info (fastfetch) | `erch refresh fastfetch` |
+| `fcitx5/` | CJK input method (Fcitx5) | — |
+| `fontconfig/` | Font rendering config | — |
+| `foot/` | Terminal (Foot) | Theme-aware via `.tpl` |
+| `ghostty/` | Terminal (Ghostty) | Theme-aware via `.tpl` |
 | `git/` | Git config | — |
-| `btop/` | System monitor | Theme-aware via `.tpl` |
-| `helix/` | Helix editor | Theme-aware via `.tpl` |
-| `chromium/` | Browser policies | Theme-aware via `.tpl` |
+| `git-hooks/` | Git hooks | — |
+| `hypr/` | Hyprland (WM, bindings, monitors, input, idle, lock) | `erch refresh hypr/<file>` |
+| `hyprland-preview-share-picker/` | Hyprland share picker CSS | Theme-aware via `.tpl` |
+| `imv/` | Image viewer (imv) | — |
+| `kitty/` | Terminal (Kitty) | Theme-aware via `.tpl` |
+| `lazygit/` | Git TUI (lazygit) | — |
 | `notes/` | Wiki/notes defaults | `erch wiki notes init` |
+| `obsidian/` | Obsidian vault config | Theme-aware via `.tpl` |
+| `opencode/` | AI coding agent (opencode) | — |
+| `starship.toml` | Shell prompt (Starship) | — |
+| `swayosd/` | On-screen display (SwayOSD) | Theme-aware via `.tpl` / `erch refresh swayosd` |
+| `systemd/` | Systemd user services | — |
+| `tmux/` | Terminal multiplexer (tmux) | `erch refresh tmux` |
+| `Typora/` | Markdown editor (Typora) | — |
+| `uwsm/` | UWSM session config | — |
+| `walker/` | App launcher (Walker) | Theme-aware via `.tpl` / `erch refresh walker` |
+| `waybar/` | Status bar (Waybar) | Theme-aware via `.tpl` / `erch refresh waybar` |
+| `wiremix/` | WireGuard VPN (WireMix) | — |
+| `xdg-terminals.list` | XDG terminal defaults | — |
+| `xournalpp/` | Annotation (Xournal++) | — |
 
 ## How Configs Are Applied
 

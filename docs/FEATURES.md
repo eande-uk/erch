@@ -26,9 +26,9 @@
 | Environment variables | ✓ | `config/environment.d/`, `config/erch/env` |
 | Display server (Hyprland) | ✓ | `config/hypr/` core configs |
 | Input (keyboard, touchpad) | ✓ | `config/hypr/input.conf` |
-| Display management | ✓ | kanshi, wlsunset, hypridle, hyprlock |
-| Night light | ✓ | wlsunset toggle via `erch toggle nightlight` |
-| SSH | ✓ | `config/ssh/` |
+| Display management | ✓ | hypridle, hyprlock, hyprsunset |
+| Night light | ✓ | hyprsunset toggle via `erch toggle nightlight` |
+| SSH | ✓ | OpenSSH server (not managed by erch config) |
 
 ## L2 — Configs
 
@@ -51,7 +51,7 @@
 | Chromium | ✓ | `config/chromium/`, theme-aware .tpl |
 | UWSM | ✓ | `config/uwsm/` |
 | XDG defaults | ✓ | `config/xdg-terminals.list` |
-| GPG | ✓ | `config/gnupg/` |
+| GPG | ✓ | `config/gpg-hooks/` (dirmngr.conf) |
 | Fontconfig | ✓ | `config/fontconfig/` |
 | Fcitx5 | ✓ | `config/fcitx5/` |
 | Helix | ✓ | Theme-aware .tpl template |
@@ -63,7 +63,7 @@
 | Built-in themes | ✓ | 19 themes (catppuccin, nord, tokyo-night, everforest, gruvbox, kanagawa, et al.) |
 | Theme switch | ✓ | `erch theme set <name>` — updates all components atomically |
 | Theme refresh | ✓ | `erch theme refresh` — re-applies current theme |
-| Theme-aware templates | ✓ | 17 .tpl files rendered with `{{ variable }}` from colors.toml |
+| Theme-aware templates | ✓ | 19 .tpl files rendered with `{{ variable }}` from colors.toml |
 | Wallpaper cycling | ✓ | `erch theme bg next` |
 | VS Code themes | ✓ | Per-theme vscode.json |
 | Neovim themes | ✓ | Per-theme neovim.lua |
@@ -82,10 +82,10 @@
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| CLI commands | ✓ | 290+ `erch-*` scripts across 30+ groups |
+| CLI commands | ✓ | 294 `erch-*` scripts across 58 groups |
 | Self-documenting metadata | ✓ | `# erch:summary=`, `erch commands --json` |
-| Command groups | ✓ | 30+ groups (theme, pkg, install, wiki, capture, etc.) |
-| Migrations | ✓ | 325+ scripts, run via `erch migrate`, one-shot upgrade |
+| Command groups | ✓ | 58 groups (theme, pkg, install, wiki, capture, etc.) |
+| Migrations | ✓ | 330 scripts, run via `erch migrate`, one-shot upgrade |
 | Hooks | ✓ | Pre/post hooks for install, theme, update events |
 | Dynamic toggles | ✓ | `erch toggle <feature>` for nightlight, waybar, etc. |
 | Refresh/restart | ✓ | `erch refresh <config>`, `erch restart <component>` |

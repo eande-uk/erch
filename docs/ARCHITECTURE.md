@@ -10,7 +10,7 @@ graph TD
   L1["L1 — Defaults<br/>shell init, env, display server, input"] --> L2
   L2["L2 — Configs<br/>terminal, bar, launcher, editor, git, tmux"] --> L3
   L3["L3 — Theme<br/>19 color themes, branding, wallpapers"] --> L4
-  L4["L4 — Polish<br/>290+ CLI commands, migrations, hooks, toggles"]
+  L4["L4 — Polish<br/>294 CLI commands, migrations, hooks, toggles"]
 ```
 
 | Layer | Directory | What it contains |
@@ -117,4 +117,4 @@ graph TD
 4. **Theme system uses sed, not a real template engine.** Simple, fast, no dependencies. Templates use `{{ variable }}` syntax with three value forms (raw, stripped, RGB).
 5. **Configs are read-only in `default/`, writable in `~/.config/`.** The `erch refresh` command resets a config to default with automatic backup.
 6. **Branch model isolates risk.** master is stable, rc is release candidate, dev tracks upstream Omarchy with erch-favoring merge strategy. All branches have CI.
-7. **290+ commands via a single CLI.** Every `erch-*` binary is auto-discovered by the `erch` dispatcher. Metadata in comments drives help text, JSON output, and group organization.
+7. **294 commands via a single CLI.** Every `erch-*` binary is auto-discovered by the `erch` dispatcher. Metadata in comments drives help text, JSON output, and group organization.

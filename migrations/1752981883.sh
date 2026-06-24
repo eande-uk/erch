@@ -7,5 +7,5 @@ if erch-cmd-missing walker; then
   rm -rf ~/.config/wofi
 
   mkdir -p ~/.config/walker
-  cp -r ~/.local/share/erch/config/walker/* ~/.config/walker/
+  cp -r $ERCH_PATH/config/walker/* ~/.config/walker/
 fi

@@ -1,4 +1,4 @@
-echo "Ensure .config/hypr/looknfeel.conf is available and included"
+echo "Ensure .config/hypr/looknfeel.lua is available"
 
 if [[ ! -f ~/.config/hypr/looknfeel.conf ]]; then
   cp $ERCH_PATH/config/hypr/looknfeel.conf ~/.config/hypr/looknfeel.conf

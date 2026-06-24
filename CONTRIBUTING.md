@@ -66,6 +66,8 @@ Before a PR can be merged, all CI checks must pass:
 - Metadata validation
 - Migration format
 - Package validation
+- CLI tests
+- Salat tests
 - Wiki tests
 
 ## Releases

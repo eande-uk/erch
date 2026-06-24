@@ -8,6 +8,7 @@ Shell-based tests following the TAP (Test Anything Protocol) format.
 |------|----------|---------|
 | `erch-cli-test.sh` | CLI metadata, routing, help output, JSON, aliases, fallbacks | `bash test/erch-cli-test.sh` |
 | `erch-wiki-test.sh` | Wiki command, init, templates, configs, packaging, integration | `bash test/erch-wiki-test.sh` |
+| `erch-salat-test.sh` | Prayer times, cache parsing, next prayer, language toggle, Waybar output | `bash test/erch-salat-test.sh` |
 
 ## CI Checks
 
@@ -18,6 +19,8 @@ The CI pipeline (`.github/workflows/ci.yml`) runs:
 3. **migration format** — 0644 perms, no shebang
 4. **package validation** — no duplicates, no overlap between common and work
 5. **wiki tests** — full test suite with pandoc
+6. **cli tests** — metadata, routing, JSON output, edge cases
+7. **salat tests** — prayer times, cache, Waybar output, language toggle
 
 ## Writing Tests
 

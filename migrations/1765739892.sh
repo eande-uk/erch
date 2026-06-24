@@ -1,3 +1,5 @@
+echo "Adjust snapper space limits and enable btrfs quota"
+
 if erch-cmd-present btrfs && erch-cmd-present snapper; then
   echo "Adjust snapper space limits & enable btrfs quota"
 

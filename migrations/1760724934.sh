@@ -1,4 +1,4 @@
-# Handles changes since 3.1.0-RC
+echo "Handles changes since 3.1.0-RC"
 
 echo "Add shift+insert for kitty"
 # Add shift+insert paste keybinding to kitty.conf if it doesn't exist

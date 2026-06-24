@@ -1,5 +1,4 @@
-#!/bin/bash
-set -e
+echo "Change display manager to SDDM"
 
 error_exit() {
   echo -e "\033[31mERROR: Migration failed! Manual intervention required.\033[0m" >&2
@@ -8,8 +7,6 @@ error_exit() {
 }
 
 trap error_exit ERR
-
-echo "Change display manager to SDDM"
 
 erch-pkg-add sddm libsecret gnome-keyring || error_exit
 

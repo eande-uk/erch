@@ -6,7 +6,7 @@ erch is a beautiful, modern, packaged-by-use-case Linux distribution by E&E. Bui
 
 - **Everything works.** 19 color themes, cohesive branding, dynamic theme system that updates every app when you switch.
 - **Packaged by use-case.** Select a profile at install time (general, work, school, game) and get the software you need without bloat.
-- **A single CLI.** The `erch` command dispatches to 290+ commands across 30+ groups. Every command is self-documenting.
+- **A single CLI.** The `erch` command dispatches to 294 commands across 58 groups. Every command is self-documenting.
 - **Notes as a core feature.** Built-in wiki with vimwiki + mdbook + pandoc. Write in Neovim, publish as a website or PDF.
 - **No lock-in.** All configs are standard files in `~/.config/`. No proprietary daemons, no data collection.
 
