@@ -2,9 +2,9 @@
 
 ## Phase 1: Fork & Foundation ✓
 
-*Completed in the initial erch fork from Omarchy.*
+*Completed in the initial erch fork from upstream Omarchy.*
 
-- [x] Rebrand from Omarchy: ASCII art, logos, icons, boot scripts, plymouth, SDDM
+- [x] Rebrand from upstream Omarchy: ASCII art, logos, icons, boot scripts, plymouth, SDDM
 - [x] Branch model: master (stable) / rc (release candidate) / dev (upstream tracking)
 - [x] Profile-based package system: common/work/school/game with interactive installer prompt
 - [x] Remove commercial packages from defaults (1password, obsidian, typora, spotify, signal, all webapps)

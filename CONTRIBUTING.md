@@ -75,4 +75,4 @@ Before a PR can be merged, all CI checks must pass:
 
 ## Releases
 
-erch uses semver. `master` is always stable. `rc` and `dev` track upstream Omarchy.
+erch uses semver. `master` is always stable. `rc` and `dev` track upstream erch.

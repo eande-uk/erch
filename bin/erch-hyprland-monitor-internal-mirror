@@ -14,12 +14,12 @@ EXTERNAL=$(hyprctl monitors -j | jq -r '.[] | select(.name | contains("eDP") | n
 
 on() {
   if [[ -z $EXTERNAL ]]; then
-    omarchy-notification-send -g 󰍹 "No external monitors found for mirror"
+    erch-notification-send -g 󰍹 "No external monitors found for mirror"
     exit 1
   fi
 
   if [[ -z $INTERNAL ]]; then
-    omarchy-notification-send -g 󰍹 "No laptop monitor found to mirror"
+    erch-notification-send -g 󰍹 "No laptop monitor found to mirror"
     exit 1
   fi
 

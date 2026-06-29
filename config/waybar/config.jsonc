@@ -71,7 +71,7 @@
     "format": "{:%H\n  —\n%M}",
     "format-alt": "{:L%d %B W%V %Y}",
     "tooltip": false,
-    "on-click-right": "omarchy-launch-floating-terminal-with-presentation omarchy-tz-select"
+    "on-click-right": "erch-launch-floating-terminal-with-presentation erch-tz-select"
   },
   "custom/weather": {
     "exec": "$ERCH_PATH/default/waybar/weather.sh",

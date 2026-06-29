@@ -15,4 +15,4 @@ o.window({ tag = "pop" }, { rounding = 8 })
 o.window({ tag = "noidle" }, { idle_inhibit = "always" })
 
 -- Disable animations for image selector overlay.
-hl.layer_rule({ match = { namespace = "omarchy-image-selector" }, no_anim = true })
+hl.layer_rule({ match = { namespace = "erch-image-selector" }, no_anim = true })

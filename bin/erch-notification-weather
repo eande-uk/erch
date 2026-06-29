@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# erch:summary=Show the current weather notification
+
+erch-notification-send -g $(erch-weather-icon) -u low "$(erch-weather-status)"

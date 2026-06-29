@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# omarchy:summary=Set or toggle rounded Hyprlock input field corners
-# omarchy:args=[toggle|sharp|round]
-# omarchy:examples=omarchy style corners hyprlock toggle | omarchy style corners hyprlock round | omarchy style corners hyprlock sharp
+# erch:summary=Set or toggle rounded Hyprlock input field corners
+# erch:args=[toggle|sharp|round]
+# erch:examples=erch style corners hyprlock toggle | erch style corners hyprlock round | erch style corners hyprlock sharp
 
-TOGGLES_CONFIG="$HOME/.local/state/omarchy/toggles/hyprlock.conf"
+TOGGLES_CONFIG="$HOME/.local/state/erch/toggles/hyprlock.conf"
 
 set_rounding() {
   local radius="$1"
@@ -29,7 +29,7 @@ case "${1:-toggle}" in
     fi
     ;;
   *)
-    echo "Usage: omarchy-style-corners-hyprlock [toggle|sharp|round]"
+    echo "Usage: erch-style-corners-hyprlock [toggle|sharp|round]"
     exit 1
     ;;
 esac

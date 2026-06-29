@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# erch:summary=Cache background switcher thumbnails for the current theme
+
+theme_name=$(cat "$HOME/.config/erch/current/theme.name" 2>/dev/null)
+
+erch-menu-images \
+  --cache-only \
+  "$HOME/.config/erch/current/theme/backgrounds" \
+  "$HOME/.config/erch/backgrounds/$theme_name"

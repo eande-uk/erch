@@ -1,8 +1,8 @@
--- Omarchy Hyprland setup: helpers, defaults, and current theme overrides.
+-- erch Hyprland setup: helpers, defaults, and current theme overrides.
 
 require("default.hypr.helpers")
 
--- Use Omarchy defaults, but don't edit these directly.
+-- Use erch defaults, but don't edit these directly.
 require("default.hypr.autostart")
 require("default.hypr.bindings.media")
 require("default.hypr.bindings.clipboard")
@@ -16,9 +16,9 @@ require("default.hypr.windows")
 -- Current theme overrides.
 do
   local paths = require("default.hypr.paths")
-  local theme = io.open(paths.config_home .. "/omarchy/current/theme/hyprland.lua", "r")
+  local theme = io.open(paths.config_home .. "/erch/current/theme/hyprland.lua", "r")
   if theme then
     theme:close()
-    require("omarchy.current.theme.hyprland")
+    require("erch.current.theme.hyprland")
   end
 end

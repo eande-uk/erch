@@ -20,7 +20,7 @@ if (($# > 0)) && [[ $1 != -* ]]; then
 fi
 
 while (($# > 0)); do
-  if parse_omarchy_option "$@"; then
+  if parse_erch_option "$@"; then
     shift 2
   else
     args+=("$1")

@@ -1,14 +1,14 @@
 -- Learn how to configure Hyprland: https://wiki.hypr.land/Configuring/Start/
 
--- Load user modules from ~/.config and Omarchy defaults from $OMARCHY_PATH.
+-- Load user modules from ~/.config and erch defaults from $ERCH_PATH.
 package.path = os.getenv("HOME")
   .. "/.config/?.lua;"
-  .. (os.getenv("OMARCHY_PATH") or (os.getenv("HOME") .. "/.local/share/omarchy"))
+  .. (os.getenv("ERCH_PATH") or (os.getenv("HOME") .. "/.local/share/erch"))
   .. "/?.lua;"
   .. package.path
 
--- All Omarchy default setups
-require("default.hypr.omarchy")
+-- All erch default setups
+require("default.hypr.erch")
 
 -- Change your own setup in these files and override defaults.
 require("hypr.monitors")

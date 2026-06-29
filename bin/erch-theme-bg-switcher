@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# erch:summary=Open the erch background switcher
+# erch:group=theme
+# erch:name=bg-switcher
+# erch:aliases=erch background
+
+ERCH_PATH=${ERCH_PATH:-$HOME/.local/share/erch}
+theme_name=$(cat "$HOME/.config/erch/current/theme.name" 2>/dev/null)
+current_background=$(readlink -f "$HOME/.config/erch/current/background" 2>/dev/null)
+
+erch-menu-images \
+  --selected "$current_background" \
+  "$HOME/.config/erch/current/theme/backgrounds" \
+  "$HOME/.config/erch/backgrounds/$theme_name"

@@ -13,7 +13,7 @@ description: >
 
 # erch Skill
 
-Manage [erch](https://omarchy.org/) Linux systems - a beautiful, modern, opinionated Arch Linux distribution with Hyprland.
+Manage [erch](https://erch.eande.uk/) Linux systems - a beautiful, modern, opinionated Arch Linux distribution with Hyprland.
 
 This skill is for end-user customization on installed systems.
 It is not for contributing to erch source code.

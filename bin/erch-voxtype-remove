@@ -18,7 +18,7 @@ if erch-cmd-present voxtype; then
   erch-pkg-drop wtype voxtype-bin
   rm -rf ~/.config/voxtype
   rm -rf ~/.local/share/voxtype
-  omarchy-hyprland-toggle voxtype off
+  erch-hyprland-toggle voxtype off
 else
   echo "Voxtype was not installed."
 fi

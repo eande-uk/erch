@@ -14,6 +14,6 @@ else
   private_flag="--incognito"
 fi
 
-systemd-run --user --quiet --collect --unit="omarchy-browser-$(date +%s%N)" \
+systemd-run --user --quiet --collect --unit="erch-browser-$(date +%s%N)" \
   --property=StandardOutput=null --property=StandardError=null \
   uwsm-app -- "$browser_exec" "${@/--private/$private_flag}"
