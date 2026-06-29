@@ -2,18 +2,16 @@
 
 ## Our Pledge
 
-We pledge to make participation in this project a harassment-free experience
-for everyone, regardless of age, body size, disability, ethnicity, gender
-identity, level of experience, nationality, personal appearance, race,
-religion, or sexual identity and orientation.
+We will review promising PRs, that live up to standards.
 
 ## Standards
 
-**Be respectful.** Disagreement is fine, personal attacks are not.
+**Review your code** Using AI to produce PRs are fine, just review before submitting,
+ ensuring consistency with our vision/architecture.
 
-**Be constructive.** Criticism should be specific and actionable.
+**Be respectful.** Disagreement is fine, harassment is not.
 
-**Be inclusive.** We welcome contributors of all backgrounds.
+**Be constructive.** Criticism should be specific, actionable and well documented.
 
 ## Enforcement
 
@@ -21,4 +19,4 @@ Project maintainers are responsible for clarifying standards and will take
 appropriate action on any behavior they deem unacceptable.
 
 To report an issue, contact the maintainers via the repository's security
-contact or a GitHub issue.
+contact or an issue.

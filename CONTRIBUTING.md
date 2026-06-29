@@ -17,6 +17,7 @@ type: feat | fix | chore | docs | refactor | test | ci
 ```
 
 Examples:
+
 - `feat: add profile-based package selection`
 - `fix: correct waybar icon path`
 - `docs: add install pipeline README`
@@ -52,6 +53,7 @@ git commit    # Pre-commit hook validates: branch, syntax, metadata, migrations,
 # 3. Push and open a PR
 git push -u origin user:fix-waybar-icon
 # → Open PR at https://github.com/eande-os/erch
+# → OR: Open PR at https://git.eande.uk/eande-os/erch
 
 # 4. After PR is merged (squash merge), delete the branch
 git branch -d user:fix-waybar-icon
@@ -62,6 +64,7 @@ git branch -d user:fix-waybar-icon
 ## CI
 
 Before a PR can be merged, all CI checks must pass:
+
 - shellcheck (bash style)
 - Metadata validation
 - Migration format
