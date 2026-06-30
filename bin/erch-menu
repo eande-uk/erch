@@ -288,19 +288,19 @@ show_style_menu() {
 }
 
 show_style_corners_menu() {
-  case $(omarchy-menu-select "Corners" "󰝣  Sharp" "󰘇  Round") in
-  *Sharp*) omarchy-style-corners sharp ;;
-  *Round*) omarchy-style-corners round ;;
+  case $(erch-menu-select "Corners" "󰝣  Sharp" "󰘇  Round") in
+  *Sharp*) erch-style-corners sharp ;;
+  *Round*) erch-style-corners round ;;
   *) show_style_menu ;;
   esac
 }
 
 show_waybar_position_menu() {
   case $(menu "Waybar Position" "󰁝  Top\n󰁅  Bottom\n󰁍  Left\n󰁔  Right") in
-  *Top*) omarchy-style-waybar-position top ;;
-  *Bottom*) omarchy-style-waybar-position bottom ;;
-  *Left*) omarchy-style-waybar-position left ;;
-  *Right*) omarchy-style-waybar-position right ;;
+  *Top*) erch-style-waybar-position top ;;
+  *Bottom*) erch-style-waybar-position bottom ;;
+  *Left*) erch-style-waybar-position left ;;
+  *Right*) erch-style-waybar-position right ;;
   *) show_style_menu ;;
   esac
 }

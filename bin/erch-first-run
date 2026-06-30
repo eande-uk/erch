@@ -5,10 +5,17 @@
 
 set -e
 
+# Ensure ERCH_PATH is set (fallback if UWSM env wasn't sourced)
+export ERCH_PATH="${ERCH_PATH:-$HOME/.local/share/erch}"
+export ERCH_INSTALL="$ERCH_PATH/install"
+
+# Source helpers needed by first-run scripts
+source "$ERCH_INSTALL/helpers/logging.sh"
+
 FIRST_RUN_MODE=~/.local/state/erch/first-run.mode
 
 if [[ -f $FIRST_RUN_MODE ]]; then
   rm -f "$FIRST_RUN_MODE"
 
-  source "$ERCH_PATH/install/first-run/all.sh"
+  source "$ERCH_INSTALL/first-run/all.sh"
 fi

@@ -1,8 +1,8 @@
-omarchy-npm-install @openai/codex codex
-omarchy-npm-install @google/gemini-cli gemini
-omarchy-npm-install @github/copilot copilot
-omarchy-npm-install opencode-ai opencode
-omarchy-npm-install playwright playwright-cli
-omarchy-npm-install @earendil-works/pi-coding-agent pi
-omarchy-npm-install @kitlangton/ghui ghui
-omarchy-npm-install hunkdiff hunk
+erch-npm-install @openai/codex codex
+erch-npm-install @google/gemini-cli gemini
+erch-npm-install @github/copilot copilot
+erch-npm-install opencode-ai opencode
+erch-npm-install playwright playwright-cli
+erch-npm-install @earendil-works/pi-coding-agent pi
+erch-npm-install @kitlangton/ghui ghui
+erch-npm-install hunkdiff hunk

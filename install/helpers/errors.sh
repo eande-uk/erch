@@ -1,3 +1,38 @@
+# Gum-safe wrappers: fall back to plain output when gum isn't installed
+safe_gum() {
+  if command -v gum &>/dev/null; then
+    gum "$@"
+  else
+    # Strip --flag args and print remaining text
+    for arg in "$@"; do
+      [[ $arg != --* ]] && printf '%s\n' "$arg"
+    done
+  fi
+}
+
+safe_gum_choose() {
+  if command -v gum &>/dev/null; then
+    gum choose "$@"
+  else
+    # Parse gum flags, collect remaining args as options
+    local header="Options:"
+    local -a opts=()
+    while (($# > 0)); do
+      case "$1" in
+        --header) header="$2"; shift 2 ;;
+        --height|--padding) shift 2 ;;
+        *) opts+=("$1"); shift ;;
+      esac
+    done
+    echo "$header"
+    for opt in "${opts[@]}"; do
+      echo "  $opt"
+    done
+    echo "(gum not installed — cannot display interactive menu)"
+    exit 1
+  fi
+}
+
 # Directs user to erch Discord
 QR_CODE='
 █▀▀▀▀▀█ ▄ ▄ ▀▄▄▄█ █▀▀▀▀▀█
@@ -35,7 +70,7 @@ show_log_tail() {
         local truncated_line="$line"
       fi
 
-      gum style "$truncated_line"
+      safe_gum style "$truncated_line"
     done
 
     echo
@@ -45,7 +80,7 @@ show_log_tail() {
 # Display the failed command or script name
 show_failed_script_or_command() {
   if [[ -n ${CURRENT_SCRIPT:-} ]]; then
-    gum style "Failed script: $CURRENT_SCRIPT"
+    safe_gum style "Failed script: $CURRENT_SCRIPT"
   else
     # Truncate long command lines to fit the display
     local cmd="$BASH_COMMAND"
@@ -55,7 +90,7 @@ show_failed_script_or_command() {
       cmd="${cmd:0:$max_cmd_width}..."
     fi
 
-    gum style "$cmd"
+    safe_gum style "$cmd"
   fi
 }
 
@@ -90,15 +125,15 @@ catch_errors() {
   clear_logo
   show_cursor
 
-  gum style --foreground 1 --padding "1 0 1 $PADDING_LEFT" "erch installation stopped!"
+  safe_gum style --foreground 1 --padding "1 0 1 $PADDING_LEFT" "erch installation stopped!"
   show_log_tail
 
-  gum style "This command halted with exit code $exit_code:"
+  safe_gum style "This command halted with exit code $exit_code:"
   show_failed_script_or_command
 
-  gum style "$QR_CODE"
+  safe_gum style "$QR_CODE"
   echo
-  gum style "Get help from the community via QR code or at https://discord.gg/tXFUdasqhY"
+  safe_gum style "Get help from the community via QR code or at https://discord.gg/tXFUdasqhY"
 
   # Offer options menu
   while true; do
@@ -118,7 +153,7 @@ catch_errors() {
     options+=("View full log")
     options+=("Exit")
 
-    choice=$(gum choose "${options[@]}" --header "What would you like to do?" --height 6 --padding "1 $PADDING_LEFT")
+    choice=$(safe_gum_choose --header "What would you like to do?" --height 6 --padding "1 $PADDING_LEFT" "${options[@]}")
 
     case "$choice" in
     "Retry installation")

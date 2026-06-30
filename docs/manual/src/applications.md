@@ -88,7 +88,7 @@ erch ships with a curated set of applications across categories. All are free an
 | App | Purpose |
 |-----|---------|
 | Steam | Game store |
-| Lutris | Game launcher |
+| Lutris/Retroarch | Game launcher |
 | mangohud | Performance overlay |
 | gamemode | System optimization |
 | wine / proton | Windows compatibility |

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# erch:summary=Show the current battery status notification
+
+erch-notification-send -g 󰁹 -u low "$(erch-battery-status)"

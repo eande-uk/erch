@@ -45,8 +45,8 @@ fi
 
 FLAG_NAME="$1"
 ACTION="${2:-toggle}"
-FLAG_FILE="$HOME/.local/state/omarchy/toggles/hypr/$FLAG_NAME.lua"
-FLAG_SOURCE="$OMARCHY_PATH/default/hypr/toggles/$FLAG_NAME.lua"
+FLAG_FILE="$HOME/.local/state/erch/toggles/hypr/$FLAG_NAME.lua"
+FLAG_SOURCE="$ERCH_PATH/default/hypr/toggles/$FLAG_NAME.lua"
 
 on() {
   if [[ -f $FLAG_SOURCE ]]; then
@@ -79,7 +79,7 @@ case $ACTION in
   off) off ;;
   toggle) toggle ;;
   *)
-    echo "Usage: omarchy-hyprland-toggle [--enabled-notification <text>] [--disabled-notification <text>] <flag-name> [on|off|toggle]" >&2
+    echo "Usage: erch-hyprland-toggle [--enabled-notification <text>] [--disabled-notification <text>] <flag-name> [on|off|toggle]" >&2
     exit 1
     ;;
 esac

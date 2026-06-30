@@ -118,7 +118,7 @@ parse_keycodes() {
 build_lua_bind_key_cache() {
   local modmask description key
 
-  omarchy-cmd-present lua || return 0
+  erch-cmd-present lua || return 0
 
   while IFS=$'\t' read -r modmask description key; do
     [[ -z $modmask || -z $description || -z $key ]] && continue

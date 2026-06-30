@@ -53,7 +53,7 @@ graph LR
   parent --> layerzero["layer-zero/<br/>Profile definitions"]
   parent --> tests["tests/<br/>Cross-target verification"]
   erch --> targets["Targets deploy<br/>erch configs natively"]
-  dotfiles --> omarchy["Upstream Omarchy<br/>via dotfiles/ stow overlay"]
+  dotfiles --> upstream["Upstream erch<br/>via dotfiles/ stow overlay"]
   dotfiles --> arch["Arch + Hyprland<br/>via dotfiles/ stow overlay"]
 ```
 
@@ -116,5 +116,5 @@ graph TD
 3. **No commercial deps in defaults.** Users opt in via standard package managers. This keeps erch free and open.
 4. **Theme system uses sed, not a real template engine.** Simple, fast, no dependencies. Templates use `{{ variable }}` syntax with three value forms (raw, stripped, RGB).
 5. **Configs are read-only in `default/`, writable in `~/.config/`.** The `erch refresh` command resets a config to default with automatic backup.
-6. **Branch model isolates risk.** master is stable, rc is release candidate, dev tracks upstream Omarchy with erch-favoring merge strategy. All branches have CI.
+6. **Branch model isolates risk.** master is stable, rc is release candidate, dev tracks upstream erch with erch-favoring merge strategy. All branches have CI.
 7. **294 commands via a single CLI.** Every `erch-*` binary is auto-discovered by the `erch` dispatcher. Metadata in comments drives help text, JSON output, and group organization.

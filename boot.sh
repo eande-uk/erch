@@ -4,14 +4,16 @@ set -e
 
 # Set install mode to online since boot.sh is used for curl installations
 export ERCH_ONLINE_INSTALL=true
-
-ansi_art='                              ██▄
-                              ███
-▄██▀██▄    ██▄██   ▄██▀███▄   ██▄▄████▄
-███   ███   ███    ▄██    ▀▀   ███   ███
-███▀▀▀▀▀▀   ██     ███         ███   ███
-▀██   ▄▄▄   ██     ▀██▄  ▄██   ███   ███
- ▀█████▀    ██      ▀▀████▀    ██▀   ███'
+ansi_art='
+                             █████
+                            ░░███
+  ██████  ████████   ██████  ░███████
+ ███░░███░░███░░███ ███░░███ ░███░░███
+░███████  ░███ ░░░ ░███ ░░░  ░███ ░███
+░███░░░   ░███     ░███  ███ ░███ ░███
+░░██████  █████    ░░██████  ████ █████
+ ░░░░░░  ░░░░░      ░░░░░░  ░░░░ ░░░░░
+'
 
 clear
 echo -e "\n$ansi_art\n"
@@ -22,13 +24,13 @@ ERCH_REF="${ERCH_REF:-master}"
 # Set mirror based on branch
 if [[ $ERCH_REF == "dev" ]]; then
   export ERCH_MIRROR=edge
-  echo 'Server = https://mirror.omarchy.org/$repo/os/$arch' | sudo tee /etc/pacman.d/mirrorlist >/dev/null
+  echo 'Server = https://mirror.erch.eande.uk/$repo/os/$arch' | sudo tee /etc/pacman.d/mirrorlist >/dev/null
 elif [[ $ERCH_REF == "rc" ]]; then
   export ERCH_MIRROR=rc
-  echo 'Server = https://rc-mirror.omarchy.org/$repo/os/$arch' | sudo tee /etc/pacman.d/mirrorlist >/dev/null
+  echo 'Server = https://rc-mirror.erch.eande.uk/$repo/os/$arch' | sudo tee /etc/pacman.d/mirrorlist >/dev/null
 else
   export ERCH_MIRROR=stable
-  echo 'Server = https://stable-mirror.omarchy.org/$repo/os/$arch' | sudo tee /etc/pacman.d/mirrorlist >/dev/null
+  echo 'Server = https://stable-mirror.erch.eande.uk/$repo/os/$arch' | sudo tee /etc/pacman.d/mirrorlist >/dev/null
 fi
 
 sudo pacman -Syu --noconfirm --needed git

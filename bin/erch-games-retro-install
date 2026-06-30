@@ -1,32 +1,32 @@
 #!/bin/bash
 
-# omarchy:summary=Create a desktop launcher for a RetroArch game
-# omarchy:args=[core path-to-game]
-# omarchy:examples=omarchy games retro install snes9x ~/Games/roms/snes/game.sfc | omarchy-games-retro-install /usr/lib/libretro/mgba_libretro.so ~/Games/roms/gba/game.gba
+# erch:summary=Create a desktop launcher for a RetroArch game
+# erch:args=[core path-to-game]
+# erch:examples=erch games retro install snes9x ~/Games/roms/snes/game.sfc | erch-games-retro-install /usr/lib/libretro/mgba_libretro.so ~/Games/roms/gba/game.gba
 
 set -e
 
 if (( $# == 0 )); then
-  mapfile -t cores < <(omarchy-games-retro-cores)
+  mapfile -t cores < <(erch-games-retro-cores)
 
   if (( ${#cores[@]} == 0 )); then
-    omarchy-notification-send -g "󰯉" "No RetroArch cores found" "/usr/lib/libretro"
+    erch-notification-send -g "󰯉" "No RetroArch cores found" "/usr/lib/libretro"
     exit 1
   fi
 
-  core=$(omarchy-menu-select "RetroArch core" "${cores[@]}") || exit 0
+  core=$(erch-menu-select "RetroArch core" "${cores[@]}") || exit 0
   [[ -n $core ]] || exit 0
   core="${core##*(}"
   core="${core%)}"
 
-  game_path=$(omarchy-menu-file "Retro game" "$HOME/Games/roms" "7z bin ccd chd cue dmg elf fds gb gba gbc iso lha m3u md n64 nds nes pbp sfc smc swc zip z64") || exit 0
+  game_path=$(erch-menu-file "Retro game" "$HOME/Games/roms" "7z bin ccd chd cue dmg elf fds gb gba gbc iso lha m3u md n64 nds nes pbp sfc smc swc zip z64") || exit 0
   [[ -n $game_path ]] || exit 0
 elif (( $# == 2 )); then
   core="$1"
   game_path="$2"
 else
-  echo "Usage: omarchy-games-retro-install [core path-to-game]"
-  echo "Example: omarchy-games-retro-install snes9x ~/Games/roms/snes/game.sfc"
+  echo "Usage: erch-games-retro-install [core path-to-game]"
+  echo "Example: erch-games-retro-install snes9x ~/Games/roms/snes/game.sfc"
   exit 1
 fi
 
@@ -55,7 +55,7 @@ icon_dir="$desktop_dir/icons"
 icon_path="$icon_dir/Retro Gaming.png"
 
 mkdir -p "$desktop_dir" "$icon_dir"
-[[ -f $icon_path ]] || cp "$HOME/.local/share/omarchy/applications/icons/Retro Gaming.png" "$icon_path"
+[[ -f $icon_path ]] || cp "$HOME/.local/share/erch/applications/icons/Retro Gaming.png" "$icon_path"
 
 cat >"$desktop_file" <<EOF
 [Desktop Entry]
@@ -73,4 +73,4 @@ EOF
 chmod +x "$desktop_file"
 update-desktop-database "$desktop_dir" &>/dev/null || true
 
-omarchy-notification-send -g "󰯉" "$game_name installed" "Start it with Super + Space"
+erch-notification-send -g "󰯉" "$game_name installed" "Start it with Super + Space"

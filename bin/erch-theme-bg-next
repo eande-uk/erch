@@ -16,7 +16,7 @@ mapfile -d '' -t BACKGROUNDS < <(
 TOTAL=${#BACKGROUNDS[@]}
 
 if (( TOTAL == 0 )); then
-  omarchy-notification-send "No background was found for theme" -t 2000
+  erch-notification-send "No background was found for theme" -t 2000
 else
   # Get current background from symlink
   if [[ -L $CURRENT_BACKGROUND_LINK ]]; then
@@ -44,5 +44,5 @@ else
     NEW_BACKGROUND="${BACKGROUNDS[$NEXT_INDEX]}"
   fi
 
-  omarchy-theme-bg-set "$NEW_BACKGROUND"
+  erch-theme-bg-set "$NEW_BACKGROUND"
 fi

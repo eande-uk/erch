@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# erch:summary=Set or toggle shape of Hyprland window corners
+# erch:args=[toggle|sharp|round]
+# erch:examples=erch style corners hyprland toggle | erch style corners hyprland round | erch style corners hyprland sharp
+
+case "${1:-toggle}" in
+  round) set -- on ;;
+  sharp) set -- off ;;
+  toggle) ;;
+  *)
+    echo "Usage: erch-style-corners-hyprland [toggle|sharp|round]"
+    exit 1
+    ;;
+esac
+
+erch-hyprland-toggle rounded-corners "$1"

@@ -65,7 +65,7 @@ show_reminders() {
     else
       body+="${reminder_minutes}-min reminder in $(format_remaining $remaining) ($(date -d "@$next" +%-H:%M))"$'\n'
     fi
-  done < <(systemctl --user list-timers --all --output=json "omarchy-reminder-*.timer" 2>/dev/null | jq -r '.[] | [.unit, .next] | @tsv')
+  done < <(systemctl --user list-timers --all --output=json "erch-reminder-*.timer" 2>/dev/null | jq -r '.[] | [.unit, .next] | @tsv')
 
   if [[ -z $body ]]; then
     erch-notification-send "󰔛" "Upcoming reminders" "No outstanding reminders" -u low
